@@ -1,0 +1,27 @@
+{
+  "name": "webdav-fs",
+  "version": "0.1.0",
+  "description": "WebDAV wrapper for Node's fs.",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perry-mitchell/webdav-fs.git"
+  },
+  "keywords": [
+    "webdav",
+    "fs",
+    "node"
+  ],
+  "author": "Perry Mitchell <perry@perrymitchell.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/perry-mitchell/webdav-fs/issues"
+  },
+  "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
+  "dependencies": {
+    "request": "^2.65.0"
+  }
+}
