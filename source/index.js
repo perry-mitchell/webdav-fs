@@ -19,12 +19,19 @@
 
 		return {
 
-			readFile: function(path, encodingOrCallback, callback) {
-				var encoding = undefined;
-				if (typeof encodingOrCallback !== "function") {
-					encoding = encodingOrCallback;
-				} else {
-					callback = encodingOrCallback;
+			readFile: function(/*path, encodingOrCallback, callback*/) {
+				var args = Array.prototype.slice.call(arguments),
+					argc = args.length;
+				if (argc <= 1) {
+					throw new Error("Invalid number of arguments");
+				}
+				var path = args[0],
+					encoding = (typeof args[1] === "string") ? args[1] : undefined,
+					callback = function() {};
+				if (typeof args[1] === "function") {
+					callback = args[1];
+				} else if (argc >= 2 && typeof args[2] === "function") {
+					callback = args[2];
 				}
 				client.getFile(endpoint, path, encoding)
 					.then(
@@ -35,7 +42,9 @@
 							(callback)(err, null);
 						}
 					);
-			}
+			},
+
+
 
 		};
 
