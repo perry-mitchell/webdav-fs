@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "request": "^2.65.0"
+    "request": "^2.65.0",
+    "xml2js": "^0.4.13"
   }
 }

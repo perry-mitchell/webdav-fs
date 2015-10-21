@@ -19,6 +19,13 @@
 
 		return {
 
+			readdir: function(path, callback) {
+				client.getDir(endpoint, path)
+					.then(function(dirData) {
+
+					});
+			},
+
 			readFile: function(/* filename[, encoding], callback */) {
 				var args = Array.prototype.slice.call(arguments),
 					argc = args.length;
