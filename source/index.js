@@ -19,7 +19,7 @@
 
 		return {
 
-			readFile: function(/*path, encodingOrCallback, callback*/) {
+			readFile: function(/* filename[, encoding], callback */) {
 				var args = Array.prototype.slice.call(arguments),
 					argc = args.length;
 				if (argc <= 1) {
@@ -30,7 +30,7 @@
 					callback = function() {};
 				if (typeof args[1] === "function") {
 					callback = args[1];
-				} else if (argc >= 2 && typeof args[2] === "function") {
+				} else if (argc >= 3 && typeof args[2] === "function") {
 					callback = args[2];
 				}
 				client.getFile(endpoint, path, encoding)
@@ -44,7 +44,31 @@
 					);
 			},
 
-
+			writeFile: function(/* filename, data[, encoding], callback */) {
+				var args = Array.prototype.slice.call(arguments),
+					argc = args.length;
+				if (argc <= 2) {
+					throw new Error("Invalid number of arguments");
+				}
+				var path = args[0],
+					data = args[1],
+					encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : undefined,
+					callback = function() {};
+				if (typeof args[2] === "function") {
+					callback = args[2];
+				} else if (argc >= 4 && typeof args[3] === "function") {
+					callback = args[3];
+				}
+				client.putFile(endpoint, path, data, encoding)
+					.then(
+						function() {
+							(callback)(null);
+						},
+						function(err) {
+							(callback)(err);
+						}
+					);
+			}
 
 		};
 
