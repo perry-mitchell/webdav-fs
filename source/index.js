@@ -2,7 +2,8 @@
 
 	"use strict";
 
-	var client = require(__dirname + "/client.js");
+	var client = require(__dirname + "/client.js"),
+		processing = require(__dirname + "/processing.js");
 
 	module.exports = function(webDAVEndpoint, username, password) {
 		var accessURL = webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username +
@@ -19,6 +20,13 @@
 
 		return {
 
+			/**
+			 * Read a directory synchronously.
+			 * Maps -> fs.readdir
+			 * @see https://nodejs.org/api/fs.html#fs_fs_readdir_path_callback
+			 * @param {String} path The path to read at
+			 * @param {Function} callback Callback: function(error, files)
+			 */
 			readdir: function(path, callback) {
 				client.getDir(endpoint, path)
 					.then(function(dirData) {
@@ -54,6 +62,20 @@
 							(callback)(err, null);
 						}
 					);
+			},
+
+			stat: function(path, callback) {
+				client.getStat(endpoint, path)
+					.then(function(data) {
+						if (data.length === 1) {
+							(callback)(null, processing.createStat(data[0]));
+						} else {
+							(callback)(new Error("Invalid response"), null);
+						}
+					})
+					.catch(function(err) {
+						(callback)(err, null);
+					});
 			},
 
 			writeFile: function(/* filename, data[, encoding], callback */) {

@@ -7,9 +7,12 @@
 		querystring = require("querystring"),
 		pathTools = require("path");
 
-	function processDirectoryResult(path, dirResult) {
+	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
 			responseItems = [];
+		if (targetOnly === undefined) {
+			targetOnly = false;
+		}
 		try {
 			responseItems = dirResult["d:multistatus"]["d:response"] || [];
 		} catch (e) {}
@@ -25,8 +28,8 @@
 			if (filename.length <= 0) {
 				return;
 			}
-			if (filename === path) {
-				// skip self
+			if ((targetOnly && filename !== path) || (!targetOnly && filename === path)) {
+				// skip self or only self
 				return;
 			}
 			filename = querystring.unescape("/" + filename);
@@ -123,6 +126,35 @@
 							(reject)(err || new Error("Bad response: " + response.statusCode));
 						} else {
 							(resolve)(body);
+						}
+					}
+				);
+			});
+		},
+
+		getStat: function(auth, path) {
+			if (path.length > 1 && path[0] === "/") {
+				path = path.substr(1);
+			}
+			path = path.trim();
+			return new Promise(function(resolve, reject) {
+				request(
+					{
+						method: "PROPFIND",
+						uri: auth.url + path
+					},
+					function(err, response, body) {
+						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
+							(reject)(err || new Error("Bad response: " + response.statusCode));
+						} else {
+							var parser = new xml2js.Parser();
+							parser.parseString(body, function (err, result) {
+								if (err) {
+									(reject)(err);
+								} else {
+									(resolve)(processDirectoryResult(path, result, true));
+								}
+							});
 						}
 					}
 				);
