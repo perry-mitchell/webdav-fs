@@ -4,7 +4,8 @@
 
 	var request = require("request"),
 		xml2js = require("xml2js"),
-		querystring = require("querystring");
+		querystring = require("querystring"),
+		pathTools = require("path");
 
 	function processDirectoryResult(path, dirResult) {
 		var items = [],
@@ -14,8 +15,7 @@
 		} catch (e) {}
 		responseItems.forEach(function(responseItem) {
 			var props = responseItem["d:propstat"][0]["d:prop"][0];
-			console.log(JSON.stringify(props, undefined, 4));
-
+			//console.log(JSON.stringify(props, undefined, 4));
 			var filename = processDirectoryResultFilename(
 					path, 
 					processXMLStringValue(responseItem["d:href"])
@@ -25,19 +25,36 @@
 			if (filename.length <= 0) {
 				return;
 			}
+			if (filename === path) {
+				// skip self
+				return;
+			}
 			filename = querystring.unescape("/" + filename);
 			var item = {
 				filename: filename,
+				basename: pathTools.basename(filename),
 				lastmod: processXMLStringValue(props["d:getlastmodified"]),
 				size: parseInt(processXMLStringValue(props["d:getcontentlength"]) || "0", 10),
 				type: itemType
 			};
-			console.log("NEW:", item);
+			if (props["d:getcontenttype"]) {
+				item.mime = processXMLStringValue(props["d:getcontenttype"]);
+			}
+			//console.log("NEW:", item);
+			items.push(item);
 		})
 		return items;
 	}
 
 	function processDirectoryResultFilename(path, resultFilename) {
+		var resultFLen = resultFilename.length;
+		if (resultFilename[resultFLen - 1] === "/") {
+			resultFilename = resultFilename.substr(0, resultFLen - 1);
+		}
+		if (path === "/" || path === "") {
+			var resultParts = resultFilename.split("/");
+			return resultParts[resultParts.length - 1];
+		}
 		var pos = resultFilename.indexOf(path);
 		if (pos >= 0) {
 			return resultFilename.substr(pos);
@@ -61,9 +78,10 @@
 	module.exports = {
 
 		getDir: function(auth, path) {
-			if (path.length > 0 && path[0] === "/") {
+			if (path.length > 1 && path[0] === "/") {
 				path = path.substr(1);
 			}
+			path = path.trim();
 			return new Promise(function(resolve, reject) {
 				request(
 					{

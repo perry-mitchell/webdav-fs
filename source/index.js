@@ -22,7 +22,12 @@
 			readdir: function(path, callback) {
 				client.getDir(endpoint, path)
 					.then(function(dirData) {
-
+						(callback)(null, dirData.map(function(dirEntry) {
+							return dirEntry.basename;
+						}));
+					})
+					.catch(function(err) {
+						(callback)(err, null);
 					});
 			},
 
