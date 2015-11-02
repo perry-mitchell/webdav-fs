@@ -6,8 +6,10 @@
 		processing = require(__dirname + "/processing.js");
 
 	module.exports = function(webDAVEndpoint, username, password) {
-		var accessURL = webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username +
-			":" + password + "@"),
+		username = username || "";
+		var accessURL = (username.length > 0) ? 
+				webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username + ":" + password + "@") :
+				webDAVEndpoint,
 			accessURLLen = accessURL.length;
 		if (accessURL[accessURLLen - 1] !== "/") {
 			accessURL += "/";
