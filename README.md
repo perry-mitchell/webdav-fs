@@ -77,6 +77,7 @@ wfs.stat("/the-internet.dat", function(error, fileStat) {
 ```
 
 A stat has the following properties:
+
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 | isFile   | Function | Check if the item is a file |
