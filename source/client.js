@@ -78,13 +78,42 @@
 		return "";
 	}
 
+	function sanitiseRemotePath(path) {
+		if (path[0] === "/") {
+			path = path.substr(1);
+		}
+		return path.trim();
+	}
+
 	module.exports = {
 
-		getDir: function(auth, path) {
-			if (path.length > 1 && path[0] === "/") {
-				path = path.substr(1);
+		deletePath: function(auth, path) {
+			path = sanitiseRemotePath(path);
+			if (path.length <= 0 || path === "/") {
+				throw new Error("Cannot delete root");
 			}
-			path = path.trim();
+			return new Promise(function(resolve, reject) {
+				request(
+					{
+						method: "DELETE",
+						uri: auth.url + path
+					},
+					function(err, response, body) {
+						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
+							(reject)(err || new Error("Bad response: " + response.statusCode));
+						} else {
+							(resolve)();
+						}
+					}
+				);
+			});
+		},
+
+		getDir: function(auth, path) {
+			path = sanitiseRemotePath(path);
+			if (path.length <= 0) {
+				path = "/";
+			}
 			return new Promise(function(resolve, reject) {
 				request(
 					{
@@ -111,9 +140,7 @@
 
 		getFile: function(auth, path, encoding) {
 			encoding = encoding || "utf8";
-			if (path[0] === "/") {
-				path = path.substr(1);
-			}
+			path = sanitiseRemotePath(path);
 			return new Promise(function(resolve, reject) {
 				request(
 					{
@@ -133,10 +160,10 @@
 		},
 
 		getStat: function(auth, path) {
-			if (path.length > 1 && path[0] === "/") {
-				path = path.substr(1);
+			path = sanitiseRemotePath(path);
+			if (path.length <= 0) {
+				path = "/";
 			}
-			path = path.trim();
 			return new Promise(function(resolve, reject) {
 				request(
 					{
@@ -163,9 +190,7 @@
 
 		putFile: function(auth, path, data, encoding) {
 			encoding = encoding || "utf8";
-			if (path[0] === "/") {
-				path = path.substr(1);
-			}
+			path = sanitiseRemotePath(path);
 			return new Promise(function(resolve, reject) {
 				request(
 					{

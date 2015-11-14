@@ -5,6 +5,18 @@
 	var client = require(__dirname + "/client.js"),
 		processing = require(__dirname + "/processing.js");
 
+	function executeCallbackAsync(callback, args) {
+		if (typeof setImmediate !== "undefined") {
+			setImmediate(function() {
+				callback.apply(null, args);
+			});
+		} else {
+			setTimeout(function() {
+				callback.apply(null, args);
+			}, 0);
+		}
+	}
+
 	module.exports = function(webDAVEndpoint, username, password) {
 		username = username || "";
 		var accessURL = (username.length > 0) ? 
@@ -58,10 +70,10 @@
 				client.getFile(endpoint, path, encoding)
 					.then(
 						function(data) {
-							(callback)(null, data);
+							executeCallbackAsync(callback, [null, data]);
 						},
 						function(err) {
-							(callback)(err, null);
+							executeCallbackAsync(callback, [err, null]);
 						}
 					);
 			},
@@ -70,13 +82,23 @@
 				client.getStat(endpoint, path)
 					.then(function(data) {
 						if (data.length === 1) {
-							(callback)(null, processing.createStat(data[0]));
+							executeCallbackAsync(callback, [null, processing.createStat(data[0])]);
 						} else {
-							(callback)(new Error("Invalid response"), null);
+							executeCallbackAsync(callback, [new Error("Invalid response"), null]);
 						}
 					})
 					.catch(function(err) {
-						(callback)(err, null);
+						executeCallbackAsync(callback, [err, null]);
+					});
+			},
+
+			unlink: function(path, callback) {
+				client.deletePath(endpoint, path)
+					.then(function() {
+						executeCallbackAsync(callback, [null]);
+					})
+					.catch(function(err) {
+						executeCallbackAsync(callback, [err]);
 					});
 			},
 
@@ -98,10 +120,10 @@
 				client.putFile(endpoint, path, data, encoding)
 					.then(
 						function() {
-							(callback)(null);
+							executeCallbackAsync(callback, [null]);
 						},
 						function(err) {
-							(callback)(err);
+							executeCallbackAsync(callback, [err]);
 						}
 					);
 			}

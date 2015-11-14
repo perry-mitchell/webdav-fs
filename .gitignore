@@ -28,3 +28,4 @@ node_modules
 
 
 source/test.js
+test/resources/dir-unlink/
