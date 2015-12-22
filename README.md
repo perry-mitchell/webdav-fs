@@ -45,6 +45,16 @@ wfs.stat("/report.docx", function(err, data) {
 
 The following methods are available on the `webdav-fs` module:
 
+### mkdir(path, callback)
+
+Create a remote directory:
+
+```
+wfs.mkdir("/remote/dir", function(error) {
+	// handle error if truthy
+});
+```
+
 ### readdir(path, callback)
 
 Read the contents of a remote directory:
@@ -83,6 +93,16 @@ A stat has the following properties:
 | isFile   | Function | Check if the item is a file |
 | isDirectory | Function | Check if the item is a directory |
 | mtime | Number | Last modification timestamp |
+
+### unlink(path, callback)
+
+Delete a remote file or directory:
+
+```
+wfs.unlink("/remote/path", function(error) {
+	// handle error if truthy
+});
+```
 
 ### writeFile(path, data, [encoding,] callback)
 
