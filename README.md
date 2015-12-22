@@ -3,6 +3,8 @@ Node fs wrapper for WebDAV.
 
 [![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs)
 
+[![webdav-fs on npm](https://nodei.co/npm/webdav-fs.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/webdav-fs)
+
 ## Installation
 
 Install webdav-fs using npm:
