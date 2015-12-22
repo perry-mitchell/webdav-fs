@@ -214,6 +214,25 @@
 					}
 				);
 			});
+		},
+
+		putDir: function(auth, path) {
+			path = sanitiseRemotePath(path);
+			return new Promise(function(resolve, reject) {
+				request(
+					{
+						method: "MKCOL",
+						uri: auth.url + path
+					},
+					function(err, response, body) {
+						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
+							(reject)(err || new Error("Bad response: " + response.statusCode));
+						} else {
+							(resolve)();
+						}
+					}
+				);
+			});
 		}
 
 	};
