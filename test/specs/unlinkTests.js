@@ -29,10 +29,11 @@
 		},
 
 		tearDown: function(done) {
+			var targetDir = this.targetDir;
 			this.server.close(function() {
 				setTimeout(function() {
-					if (isThere(this.targetDir)) {
-						rimraf(this.targetDir);
+					if (isThere(targetDir)) {
+						rimraf(targetDir);
 					}
 					(done)();
 				}, 100);

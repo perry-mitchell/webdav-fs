@@ -206,7 +206,7 @@
 						body: data
 					},
 					function(err, response, body) {
-						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
+						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
 							(reject)(err || new Error("Bad response: " + response.statusCode));
 						} else {
 							(resolve)();
@@ -225,7 +225,7 @@
 						uri: auth.url + path
 					},
 					function(err, response, body) {
-						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
+						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
 							(reject)(err || new Error("Bad response: " + response.statusCode));
 						} else {
 							(resolve)();

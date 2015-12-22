@@ -34,6 +34,16 @@
 
 		return {
 
+			mkdir: function(path, callback) {
+				client.putDir(endpoint, path)
+					.then(function() {
+						executeCallbackAsync(callback, [null]);
+					})
+					.catch(function(err) {
+						executeCallbackAsync(callback, [err]);
+					});
+			},
+
 			/**
 			 * Read a directory synchronously.
 			 * Maps -> fs.readdir
@@ -126,16 +136,6 @@
 							executeCallbackAsync(callback, [err]);
 						}
 					);
-			},
-
-			mkdir: function(path, callback) {
-				client.putDir(endpoint, path)
-					.then(function() {
-						executeCallbackAsync(callback, [null]);
-					})
-					.catch(function(err) {
-						executeCallbackAsync(callback, [err]);
-					});
 			}
 
 		};

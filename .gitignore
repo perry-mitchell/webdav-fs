@@ -29,3 +29,4 @@ node_modules
 
 source/test.js
 test/resources/dir-unlink/
+test/resources/made-dir
