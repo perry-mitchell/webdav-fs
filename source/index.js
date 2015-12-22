@@ -126,6 +126,16 @@
 							executeCallbackAsync(callback, [err]);
 						}
 					);
+			},
+
+			mkdir: function(path, callback) {
+				client.putDir(endpoint, path)
+					.then(function() {
+						executeCallbackAsync(callback, [null]);
+					})
+					.catch(function(err) {
+						executeCallbackAsync(callback, [err]);
+					});
 			}
 
 		};
