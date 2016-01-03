@@ -2,8 +2,8 @@
 
 	"use strict";
 
-	var client = require(__dirname + "/client.js"),
-		processing = require(__dirname + "/processing.js");
+	var client = require("./client.js"),
+		processing = require("./processing.js");
 
 	function executeCallbackAsync(callback, args) {
 		if (typeof setImmediate !== "undefined") {
