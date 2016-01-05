@@ -14,17 +14,19 @@
 			targetOnly = false;
 		}
 		try {
-			responseItems = dirResult["d:multistatus"]["d:response"] || [];
+      var multistatus = dirResult["d:multistatus"] || dirResult["D:multistatus"];
+			responseItems = multistatus["d:response"] || multistatus["D:response"] || [];
 		} catch (e) {}
 		responseItems.forEach(function(responseItem) {
-			var props = responseItem["d:propstat"][0]["d:prop"][0];
+      var propstat = responseItem["d:propstat"] && responseItem["d:propstat"][0] || responseItem["D:propstat"] && responseItem["D:propstat"][0];
+			var props = propstat["d:prop"] && propstat["d:prop"][0] || propstat["D:prop"] && propstat["D:prop"][0];
 			//console.log(JSON.stringify(props, undefined, 4));
 			var filename = processDirectoryResultFilename(
-					path, 
-					processXMLStringValue(responseItem["d:href"])
+					path,
+					processXMLStringValue(responseItem["d:href"] || responseItem["D:href"])
 				).trim(),
-				resourceType = processXMLStringValue(props["d:resourcetype"]),
-				itemType = (resourceType.indexOf("d:collection") >= 0) ? "directory" : "file";
+				resourceType = processXMLStringValue(props["d:resourcetype"] || props["D:resourcetype"]),
+				itemType = (resourceType.indexOf("d:collection") >= 0 || resourceType.indexOf("D:collection")) ? "directory" : "file";
 			if (filename.length <= 0) {
 				return;
 			}
@@ -36,12 +38,12 @@
 			var item = {
 				filename: filename,
 				basename: pathTools.basename(filename),
-				lastmod: processXMLStringValue(props["d:getlastmodified"]),
-				size: parseInt(processXMLStringValue(props["d:getcontentlength"]) || "0", 10),
+				lastmod: processXMLStringValue(props["d:getlastmodified"] || props["D:getlastmodified"]),
+				size: parseInt(processXMLStringValue(props["d:getcontentlength"] || props["D:getcontentlength"]) || "0", 10),
 				type: itemType
 			};
-			if (props["d:getcontenttype"]) {
-				item.mime = processXMLStringValue(props["d:getcontenttype"]);
+			if (props["d:getcontenttype"] || props["D:getcontenttype"]) {
+				item.mime = processXMLStringValue(props["d:getcontenttype"] || props["D:getcontenttype"]);
 			}
 			//console.log("NEW:", item);
 			items.push(item);
