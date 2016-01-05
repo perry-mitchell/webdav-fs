@@ -14,12 +14,14 @@
 			targetOnly = false;
 		}
 		try {
-      var multistatus = dirResult["d:multistatus"] || dirResult["D:multistatus"];
+			var multistatus = dirResult["d:multistatus"] || dirResult["D:multistatus"];
 			responseItems = multistatus["d:response"] || multistatus["D:response"] || [];
 		} catch (e) {}
 		responseItems.forEach(function(responseItem) {
-      var propstat = responseItem["d:propstat"] && responseItem["d:propstat"][0] || responseItem["D:propstat"] && responseItem["D:propstat"][0];
-			var props = propstat["d:prop"] && propstat["d:prop"][0] || propstat["D:prop"] && propstat["D:prop"][0];
+			var propstat = responseItem["d:propstat"] && responseItem["d:propstat"][0] ||
+					responseItem["D:propstat"] && responseItem["D:propstat"][0],
+				props = propstat["d:prop"] && propstat["d:prop"][0] ||
+					propstat["D:prop"] && propstat["D:prop"][0];
 			//console.log(JSON.stringify(props, undefined, 4));
 			var filename = processDirectoryResultFilename(
 					path,
