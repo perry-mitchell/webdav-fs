@@ -5,30 +5,33 @@
 	var request = require("request"),
 		xml2js = require("xml2js"),
 		querystring = require("querystring"),
-		pathTools = require("path");
+		pathTools = require("path"),
+		Bro = require("./brototype.js");
 
 	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
-			responseItems = [];
+			responseItems = [],
+			dirResultBro = Bro(dirResult);
 		if (targetOnly === undefined) {
 			targetOnly = false;
 		}
 		try {
-			var multistatus = dirResult["d:multistatus"] || dirResult["D:multistatus"];
-			responseItems = multistatus["d:response"] || multistatus["D:response"] || [];
+			var multistatus = dirResultBro.iCanHaz1("d:multistatus", "D:multistatus");
+			responseItems = Bro(multistatus).iCanHaz1("d:response", "D:response") || [];
 		} catch (e) {}
 		responseItems.forEach(function(responseItem) {
-			var propstat = responseItem["d:propstat"] && responseItem["d:propstat"][0] ||
-					responseItem["D:propstat"] && responseItem["D:propstat"][0],
-				props = propstat["d:prop"] && propstat["d:prop"][0] ||
-					propstat["D:prop"] && propstat["D:prop"][0];
+			var responseBro = Bro(responseItem),
+				propstatBro = Bro(responseBro.iCanHaz1("d:propstat.0", "D:propstat.0")),
+				props = propstatBro.iCanHaz1("d:prop.0", "D:prop.0"),
+				propsBro = Bro(props);
 			//console.log(JSON.stringify(props, undefined, 4));
 			var filename = processDirectoryResultFilename(
 					path,
-					processXMLStringValue(responseItem["d:href"] || responseItem["D:href"])
+					processXMLStringValue(responseBro.iCanHaz1("d:href", "D:href"))
 				).trim(),
-				resourceType = processXMLStringValue(props["d:resourcetype"] || props["D:resourcetype"]),
-				itemType = (resourceType.indexOf("d:collection") >= 0 || resourceType.indexOf("D:collection")) ? "directory" : "file";
+				resourceType = processXMLStringValue(propsBro.iCanHaz1("d:resourcetype", "D:resourcetype")),
+				itemType = (resourceType.indexOf("d:collection") >= 0 || resourceType.indexOf("D:collection") >= 0) ?
+					"directory" : "file";
 			if (filename.length <= 0) {
 				return;
 			}
@@ -38,16 +41,16 @@
 			}
 			filename = querystring.unescape("/" + filename);
 			var item = {
-				filename: filename,
-				basename: pathTools.basename(filename),
-				lastmod: processXMLStringValue(props["d:getlastmodified"] || props["D:getlastmodified"]),
-				size: parseInt(processXMLStringValue(props["d:getcontentlength"] || props["D:getcontentlength"]) || "0", 10),
-				type: itemType
-			};
-			if (props["d:getcontenttype"] || props["D:getcontenttype"]) {
-				item.mime = processXMLStringValue(props["d:getcontenttype"] || props["D:getcontenttype"]);
+					filename: filename,
+					basename: pathTools.basename(filename),
+					lastmod: processXMLStringValue(propsBro.iCanHaz1("d:getlastmodified", "D:getlastmodified")),
+					size: parseInt(processXMLStringValue(propsBro.iCanHaz1("d:getcontentlength", "D:getcontentlength")) || "0", 10),
+					type: itemType
+				},
+				mime = propsBro.iCanHaz1("d:getcontenttype", "D:getcontenttype");
+			if (mime) {
+				item.mime = mime;
 			}
-			//console.log("NEW:", item);
 			items.push(item);
 		})
 		return items;
