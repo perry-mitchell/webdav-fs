@@ -10,23 +10,20 @@
 
 	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
-			responseItems = [];
+			responseItems = [],
+			dirResultBro = Bro(dirResult);
 		if (targetOnly === undefined) {
 			targetOnly = false;
 		}
 		try {
-			var multistatus = dirResult["d:multistatus"] || dirResult["D:multistatus"];
-			responseItems = multistatus["d:response"] || multistatus["D:response"] || [];
+			var multistatus = dirResultBro.iCanHaz1("d:multistatus", "D:multistatus");
+			responseItems = Bro(multistatus).iCanHaz1("d:response", "D:response") || [];
 		} catch (e) {}
 		responseItems.forEach(function(responseItem) {
 			var responseBro = Bro(responseItem),
 				propstatBro = Bro(responseBro.iCanHaz1("d:propstat.0", "D:propstat.0")),
 				props = propstatBro.iCanHaz1("d:prop.0", "D:prop.0"),
 				propsBro = Bro(props);
-			/*var propstat = responseItem["d:propstat"] && responseItem["d:propstat"][0] ||
-					responseItem["D:propstat"] && responseItem["D:propstat"][0],
-				props = propstat["d:prop"] && propstat["d:prop"][0] ||
-					propstat["D:prop"] && propstat["D:prop"][0];*/
 			//console.log(JSON.stringify(props, undefined, 4));
 			var filename = processDirectoryResultFilename(
 					path,
@@ -54,7 +51,6 @@
 			if (mime) {
 				item.mime = mime;
 			}
-			//console.log("NEW:", item);
 			items.push(item);
 		})
 		return items;
