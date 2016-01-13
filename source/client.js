@@ -106,8 +106,10 @@
 						uri: auth.url + path
 					},
 					function(err, response, body) {
-						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							(resolve)();
 						}
@@ -131,8 +133,10 @@
 						}
 					},
 					function(err, response, body) {
-						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							var parser = new xml2js.Parser();
 							parser.parseString(body, function (err, result) {
@@ -160,7 +164,9 @@
 					},
 					function(err, response, body) {
 						if (err || response.statusCode !== 200) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							(resolve)(body);
 						}
@@ -184,8 +190,10 @@
 						}
 					},
 					function(err, response, body) {
-						if (err || (response.statusCode < 200 && response.statusCode >= 300)) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							var parser = new xml2js.Parser();
 							parser.parseString(body, function (err, result) {
@@ -214,7 +222,9 @@
 					},
 					function(err, response, body) {
 						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							(resolve)();
 						}
@@ -233,7 +243,9 @@
 					},
 					function(err, response, body) {
 						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							(reject)(err || new Error("Bad response: " + response.statusCode));
+							var error = new Error("Bad response: " + response.statusCode);
+							error.httpStatusCode = response.statusCode;
+							(reject)(err || error);
 						} else {
 							(resolve)();
 						}
