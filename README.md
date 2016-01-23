@@ -20,17 +20,17 @@ You can use webdav-fs in authenticated or non-authenticated mode:
 ```
 // Using authentication:
 var wfs = require("webdav-fs")(
-		"http://example.com/webdav/",
-		"username",
-		"password"
-	);
+        "http://example.com/webdav/",
+        "username",
+        "password"
+    );
 
 wfs.readdir("/Work", function(err, contents) {
-	if (!err) {
-		console.log("Dir contents:", contents);
-	} else {
-		console.log("Error:", err.message);
-	}
+    if (!err) {
+        console.log("Dir contents:", contents);
+    } else {
+        console.log("Error:", err.message);
+    }
 });
 ```
 
@@ -39,7 +39,7 @@ wfs.readdir("/Work", function(err, contents) {
 var wfs = require("webdav-fs")("http://example.com/webdav/");
 
 wfs.stat("/report.docx", function(err, data) {
-	console.log("Is file:", data.isFile());
+    console.log("Is file:", data.isFile());
 });
 ```
 
@@ -53,7 +53,7 @@ Create a remote directory:
 
 ```
 wfs.mkdir("/remote/dir", function(error) {
-	// handle error if truthy
+    // handle error if truthy
 });
 ```
 
@@ -63,7 +63,7 @@ Read the contents of a remote directory:
 
 ```
 wfs.readdir("/some/remote/path/", function(error, contents) {
-	// callback is an array of filenames
+    // callback is an array of filenames
 });
 ```
 
@@ -73,8 +73,8 @@ Read the contents of a remote file:
 
 ```
 wfs.readFile("/website/index.php", "utf8", function(error, data) {
-	// data is the contents of the file
-	// encoding is optional
+    // data is the contents of the file
+    // encoding is optional
 });
 ```
 
@@ -84,7 +84,7 @@ Stat a remote file:
 
 ```
 wfs.stat("/the-internet.dat", function(error, fileStat) {
-	console.log(fileStat);
+    console.log(fileStat);
 });
 ```
 
@@ -102,7 +102,7 @@ Delete a remote file or directory:
 
 ```
 wfs.unlink("/remote/path", function(error) {
-	// handle error if truthy
+    // handle error if truthy
 });
 ```
 
@@ -112,6 +112,6 @@ Write data to a remote file:
 
 ```
 wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
-	console.error(err.message);
+    console.error(err.message);
 });
 ```
