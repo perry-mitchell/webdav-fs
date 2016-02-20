@@ -3,10 +3,15 @@
 	"use strict";
 
 	var request = require("request"),
+		fetch = require("node-fetch"),
 		xml2js = require("xml2js"),
 		querystring = require("querystring"),
 		pathTools = require("path"),
 		Bro = require("./brototype.js");
+
+	function fetchRaw(fetchResponse) {
+		return fetchResponse._decode().then(function() { return fetchResponse._raw; });
+	}
 
 	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
@@ -153,26 +158,34 @@
 		},
 
 		getFile: function(auth, path, encoding) {
-			encoding = encoding || "utf8";
+			encoding = (encoding || "utf8").toLowerCase();
 			path = sanitiseRemotePath(path);
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "GET",
-						uri: auth.url + path,
-						encoding: encoding
-					},
-					function(err, response, body) {
-						if (err || response.statusCode !== 200) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)(body);
-						}
+			return fetch(auth.url + path)
+				.then(function(res) {
+					if (encoding === "utf8") {
+						return res.text();
 					}
-				);
-			});
+					//return res._decode().then(function() { return res._raw; });
+					return fetchRaw(res);
+				});
+			// return new Promise(function(resolve, reject) {
+			// 	request(
+			// 		{
+			// 			method: "GET",
+			// 			uri: auth.url + path,
+			// 			encoding: encoding
+			// 		},
+			// 		function(err, response, body) {
+			// 			if (err || response.statusCode !== 200) {
+			// 				var error = new Error("Bad response: " + response.statusCode);
+			// 				error.httpStatusCode = response.statusCode;
+			// 				(reject)(err || error);
+			// 			} else {
+			// 				(resolve)(body);
+			// 			}
+			// 		}
+			// 	);
+			// });
 		},
 
 		getStat: function(auth, path) {
