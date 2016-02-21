@@ -9,6 +9,13 @@
 		pathTools = require("path"),
 		Bro = require("./brototype.js");
 
+	/**
+	 * Fetch raw data from a node-fetch response
+	 * @param {Object} fetchResponse The response from node-fetch
+	 * @returns {Buffer}
+	 * @private
+	 * @static
+	 */
 	function fetchRaw(fetchResponse) {
 		return fetchResponse._decode().then(function() { return fetchResponse._raw; });
 	}
@@ -165,27 +172,8 @@
 					if (encoding === "utf8") {
 						return res.text();
 					}
-					//return res._decode().then(function() { return res._raw; });
 					return fetchRaw(res);
 				});
-			// return new Promise(function(resolve, reject) {
-			// 	request(
-			// 		{
-			// 			method: "GET",
-			// 			uri: auth.url + path,
-			// 			encoding: encoding
-			// 		},
-			// 		function(err, response, body) {
-			// 			if (err || response.statusCode !== 200) {
-			// 				var error = new Error("Bad response: " + response.statusCode);
-			// 				error.httpStatusCode = response.statusCode;
-			// 				(reject)(err || error);
-			// 			} else {
-			// 				(resolve)(body);
-			// 			}
-			// 		}
-			// 	);
-			// });
 		},
 
 		getStat: function(auth, path) {
@@ -193,33 +181,27 @@
 			if (path.length <= 0) {
 				path = "/";
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "PROPFIND",
-						uri: auth.url + path,
-						headers: {
-							Depth: 1
-						}
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							var parser = new xml2js.Parser();
-							parser.parseString(body, function (err, result) {
-								if (err) {
-									(reject)(err);
-								} else {
-									(resolve)(processDirectoryResult(path, result, true));
-								}
-							});
-						}
+			return fetch(auth.url + path, {
+					method: "PROPFIND",
+					headers: {
+						Depth: 1
 					}
-				);
-			});
+				})
+				.then(function(res) {
+					return res.text();
+				})
+				.then(function(body) {
+					var parser = new xml2js.Parser();
+					return new Promise(function(resolve, reject) {
+						parser.parseString(body, function (err, result) {
+							if (err) {
+								(reject)(err);
+							} else {
+								(resolve)(processDirectoryResult(path, result, true));
+							}
+						});
+					});
+				});
 		},
 
 		putFile: function(auth, path, data, encoding) {
