@@ -122,33 +122,27 @@
 			if (path.length <= 0) {
 				path = "/";
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "PROPFIND",
-						uri: auth.url + path,
-						headers: {
-							Depth: 1
-						}
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							var parser = new xml2js.Parser();
-							parser.parseString(body, function (err, result) {
-								if (err) {
-									(reject)(err);
-								} else {
-									(resolve)(processDirectoryResult(path, result));
-								}
-							});
-						}
+			return fetch(auth.url + path, {
+					method: "PROPFIND",
+					headers: {
+						Depth: 1
 					}
-				);
-			});
+				})
+				.then(function(res) {
+					return res.text();
+				})
+				.then(function(body) {
+					var parser = new xml2js.Parser();
+					return new Promise(function(resolve, reject) {
+						parser.parseString(body, function (err, result) {
+							if (err) {
+								(reject)(err);
+							} else {
+								(resolve)(processDirectoryResult(path, result));
+							}
+						});
+					});
+				});
 		},
 
 		getFile: function(auth, path, encoding) {
