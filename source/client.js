@@ -2,8 +2,7 @@
 
 	"use strict";
 
-	var request = require("request"),
-		fetch = require("node-fetch"),
+	var fetch = require("node-fetch"),
 		xml2js = require("xml2js"),
 		querystring = require("querystring"),
 		pathTools = require("path"),
