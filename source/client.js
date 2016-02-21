@@ -2,11 +2,23 @@
 
 	"use strict";
 
-	var request = require("request"),
+	var fetch = require("node-fetch"),
 		xml2js = require("xml2js"),
 		querystring = require("querystring"),
 		pathTools = require("path"),
-		Bro = require("./brototype.js");
+		Bro = require("./brototype.js"),
+		Streamifier = require("streamifier");
+
+	/**
+	 * Fetch raw data from a node-fetch response
+	 * @param {Object} fetchResponse The response from node-fetch
+	 * @returns {Buffer}
+	 * @private
+	 * @static
+	 */
+	function fetchRaw(fetchResponse) {
+		return fetchResponse._decode().then(function() { return fetchResponse._raw; });
+	}
 
 	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
@@ -99,23 +111,9 @@
 			if (path.length <= 0 || path === "/") {
 				throw new Error("Cannot delete root");
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "DELETE",
-						uri: auth.url + path
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)();
-						}
-					}
-				);
-			});
+			return fetch(auth.url + path, {
+					method: "DELETE"
+				});
 		},
 
 		getDir: function(auth, path) {
@@ -123,56 +121,39 @@
 			if (path.length <= 0) {
 				path = "/";
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "PROPFIND",
-						uri: auth.url + path,
-						headers: {
-							Depth: 1
-						}
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							var parser = new xml2js.Parser();
-							parser.parseString(body, function (err, result) {
-								if (err) {
-									(reject)(err);
-								} else {
-									(resolve)(processDirectoryResult(path, result));
-								}
-							});
-						}
+			return fetch(auth.url + path, {
+					method: "PROPFIND",
+					headers: {
+						Depth: 1
 					}
-				);
-			});
+				})
+				.then(function(res) {
+					return res.text();
+				})
+				.then(function(body) {
+					var parser = new xml2js.Parser();
+					return new Promise(function(resolve, reject) {
+						parser.parseString(body, function (err, result) {
+							if (err) {
+								(reject)(err);
+							} else {
+								(resolve)(processDirectoryResult(path, result));
+							}
+						});
+					});
+				});
 		},
 
 		getFile: function(auth, path, encoding) {
-			encoding = encoding || "utf8";
+			encoding = (encoding || "utf8").toLowerCase();
 			path = sanitiseRemotePath(path);
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "GET",
-						uri: auth.url + path,
-						encoding: encoding
-					},
-					function(err, response, body) {
-						if (err || response.statusCode !== 200) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)(body);
-						}
+			return fetch(auth.url + path)
+				.then(function(res) {
+					if (encoding === "utf8") {
+						return res.text();
 					}
-				);
-			});
+					return fetchRaw(res);
+				});
 		},
 
 		getStat: function(auth, path) {
@@ -180,78 +161,58 @@
 			if (path.length <= 0) {
 				path = "/";
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "PROPFIND",
-						uri: auth.url + path,
-						headers: {
-							Depth: 1
-						}
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							var parser = new xml2js.Parser();
-							parser.parseString(body, function (err, result) {
-								if (err) {
-									(reject)(err);
-								} else {
-									(resolve)(processDirectoryResult(path, result, true));
-								}
-							});
-						}
+			return fetch(auth.url + path, {
+					method: "PROPFIND",
+					headers: {
+						Depth: 1
 					}
-				);
-			});
+				})
+				.then(function(res) {
+					return res.text();
+				})
+				.then(function(body) {
+					var parser = new xml2js.Parser();
+					return new Promise(function(resolve, reject) {
+						parser.parseString(body, function (err, result) {
+							if (err) {
+								(reject)(err);
+							} else {
+								(resolve)(processDirectoryResult(path, result, true));
+							}
+						});
+					});
+				});
 		},
 
 		putFile: function(auth, path, data, encoding) {
-			encoding = encoding || "utf8";
+			encoding = (encoding || "utf8").toLowerCase();
+			var mime;
+			if (encoding === "utf8") {
+				mime = "text/plain";
+			} else if (encoding === "binary") {
+				mime = "application/octet-stream";
+				if (typeof data !== "string") {
+					// Not a string, make a readable stream
+					data = Streamifier.createReadStream(data);
+				}
+			} else {
+				throw new Error("Unknown or unspecified encoding");
+			}
 			path = sanitiseRemotePath(path);
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "PUT",
-						uri: auth.url + path,
-						encoding: encoding,
-						body: data
+			return fetch(auth.url + path, {
+					method: "PUT",
+					headers: {
+						"Content-Type": mime
 					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)();
-						}
-					}
-				);
-			});
+					body: data
+				});
 		},
 
 		putDir: function(auth, path) {
 			path = sanitiseRemotePath(path);
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "MKCOL",
-						uri: auth.url + path
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)();
-						}
-					}
-				);
-			});
+			return fetch(auth.url + path, {
+					method: "MKCOL"
+				});
 		}
 
 	};
