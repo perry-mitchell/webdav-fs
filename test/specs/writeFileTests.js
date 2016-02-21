@@ -33,11 +33,23 @@
 
 		writeFile: {
 
+			testWriteText: function(test) {
+				var targetFile = this.testFileName;
+				wfs.writeFile("test.dat", "some text", function(err) {
+					if (err) {
+                        throw err;
+                    }
+					var txt = fs.readFileSync(targetFile, "utf8");
+					test.strictEqual(txt, "some text", "Read content should be accurate");
+					test.done();
+				})
+			},
+
             testWriteData: function(test) {
                 var buffer = new Buffer(4),
                     targetFile = this.testFileName;
                 buffer.writeFloatBE(0xcafebabe, 0);
-                wfs.writeFile("test.dat", buffer, function(err) {
+                wfs.writeFile("test.dat", buffer, "binary", function(err) {
                     if (err) {
                         throw err;
                     }
