@@ -112,23 +112,9 @@
 			if (path.length <= 0 || path === "/") {
 				throw new Error("Cannot delete root");
 			}
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "DELETE",
-						uri: auth.url + path
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)();
-						}
-					}
-				);
-			});
+			return fetch(auth.url + path, {
+					method: "DELETE"
+				});
 		},
 
 		getDir: function(auth, path) {
@@ -231,23 +217,9 @@
 
 		putDir: function(auth, path) {
 			path = sanitiseRemotePath(path);
-			return new Promise(function(resolve, reject) {
-				request(
-					{
-						method: "MKCOL",
-						uri: auth.url + path
-					},
-					function(err, response, body) {
-						if (err || (response.statusCode < 200 || response.statusCode >= 300)) {
-							var error = new Error("Bad response: " + response.statusCode);
-							error.httpStatusCode = response.statusCode;
-							(reject)(err || error);
-						} else {
-							(resolve)();
-						}
-					}
-				);
-			});
+			return fetch(auth.url + path, {
+					method: "MKCOL"
+				});
 		}
 
 	};
