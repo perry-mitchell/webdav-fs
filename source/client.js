@@ -20,6 +20,15 @@
 		return fetchResponse._decode().then(function() { return fetchResponse._raw; });
 	}
 
+    function handleResponseError(res) {
+        if (res.status >= 400) {
+            var err = new Error("Bad response: " + res.status);
+            err.httpStatusCode = res.status;
+            throw err;
+        }
+        return res;
+    }
+
 	function processDirectoryResult(path, dirResult, targetOnly) {
 		var items = [],
 			responseItems = [],
@@ -114,14 +123,7 @@
 			return fetch(auth.url + path, {
 					method: "DELETE"
 				})
-				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
-					return res;
-				});
+				.then(handleResponseError);
 		},
 
 		getDir: function(auth, path) {
@@ -135,14 +137,10 @@
 						Depth: 1
 					}
 				})
-				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
-					return res.text();
-				})
+				.then(handleResponseError)
+                .then(function(res) {
+                    return res.text();
+                })
 				.then(function(body) {
 					var parser = new xml2js.Parser();
 					return new Promise(function(resolve, reject) {
@@ -161,12 +159,8 @@
 			encoding = (encoding || "utf8").toLowerCase();
 			path = sanitiseRemotePath(path);
 			return fetch(auth.url + path)
+                .then(handleResponseError)
 				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
 					if (encoding === "utf8") {
 						return res.text();
 					}
@@ -185,12 +179,8 @@
 						Depth: 1
 					}
 				})
+                .then(handleResponseError)
 				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
 					return res.text();
 				})
 				.then(function(body) {
@@ -229,14 +219,7 @@
 					},
 					body: data
 				})
-				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
-					return res;
-				});
+				.then(handleResponseError);
 		},
 
 		putDir: function(auth, path) {
@@ -244,14 +227,7 @@
 			return fetch(auth.url + path, {
 					method: "MKCOL"
 				})
-				.then(function(res) {
-					if(res.status >= 400) {
-						var err = new Error("Bad response: " + res.status);
-						err.httpStatusCode = res.status;
-						throw err;
-					}
-					return res;
-				});
+				.then(handleResponseError);
 		}
 
 	};
