@@ -113,6 +113,14 @@
 			}
 			return fetch(auth.url + path, {
 					method: "DELETE"
+				})
+				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
+					return res;
 				});
 		},
 
@@ -128,6 +136,11 @@
 					}
 				})
 				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
 					return res.text();
 				})
 				.then(function(body) {
@@ -149,6 +162,11 @@
 			path = sanitiseRemotePath(path);
 			return fetch(auth.url + path)
 				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
 					if (encoding === "utf8") {
 						return res.text();
 					}
@@ -168,6 +186,11 @@
 					}
 				})
 				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
 					return res.text();
 				})
 				.then(function(body) {
@@ -205,6 +228,14 @@
 						"Content-Type": mime
 					},
 					body: data
+				})
+				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
+					return res;
 				});
 		},
 
@@ -212,6 +243,14 @@
 			path = sanitiseRemotePath(path);
 			return fetch(auth.url + path, {
 					method: "MKCOL"
+				})
+				.then(function(res) {
+					if(res.status >= 400) {
+						var err = new Error("Bad response: " + res.status);
+						err.httpStatusCode = res.status;
+						throw err;
+					}
+					return res;
 				});
 		}
 
