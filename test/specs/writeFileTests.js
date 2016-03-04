@@ -14,6 +14,7 @@
 
 		setUp: function(done) {
             this.testFileName = __dirname + "/../resources/test.dat";
+            this.testSourceFile = __dirname + "/../resources/dir1/bin.dat";
 			this.server = jsDAV.createServer({
 				node: __dirname + "/../resources/",
 				locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data")
@@ -61,6 +62,30 @@
                         fs.read(fd, newBuffer, 0, 4, 0, function(err, num) {
                             test.ok(buffer.equals(newBuffer), "Read data should match written");
                             fs.closeSync(fd);
+                            test.done();
+                        });
+                    });
+                });
+            },
+
+            testWriteFile: function(test) {
+                var targetFile = this.testFileName,
+                    sourceFile = this.testSourceFile;
+                fs.readFile(sourceFile, "binary", function(err, data) {
+                    if (err) {
+                        throw err;
+                    }
+                    wfs.writeFile("test.dat", data, "binary", function(err) {
+                        if (err) {
+                            throw err;
+                        }
+                        fs.readFile(targetFile, "binary", function(err, finalData) {
+                            if (err) {
+                                throw err;
+                            }
+                            test.ok(finalData instanceof Buffer, "Data is a buffer");
+                            test.ok(finalData.equals && finalData.equals(data),
+                                "Data should be equal after writing");
                             test.done();
                         });
                     });

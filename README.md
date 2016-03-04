@@ -1,5 +1,5 @@
 # webdav-fs
-Node fs wrapper for WebDAV.
+Node `fs` wrapper for WebDAV. Perform basic filesystem tasks in a similar manner to using async `fs` methods like `readdir` and `writeFile`.
 
 [![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs)
 
