@@ -17,20 +17,40 @@
 		}
 	}
 
+    function extractURLDetails(url) {
+        var details = {
+                host: undefined,
+                port: 80,
+                protocol: /^https/i.test(url) ? "https" : "http",
+                path: "/"
+            },
+            portMatches = /^https?:\/\/.+:(\d+)/i.exec(url),
+            hostMatches = /^https?:\/\/(.+?)(\/.*)/i.exec(url);
+        if (portMatches && portMatches[1]) {
+            details.port = parseInt(portMatches[1], 10);
+        }
+        details.host = hostMatches[1].replace(/:\d+$/, "");
+        details.path = /\/$/.test(hostMatches[2]) ? hostMatches[2] : hostMatches[2] + "/";
+        return details;
+    }
+
 	module.exports = function(webDAVEndpoint, username, password) {
 		username = username || "";
-		var accessURL = (username.length > 0) ? 
+		var accessURL = (username.length > 0) ?
 				webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username + ":" + password + "@") :
 				webDAVEndpoint,
-			accessURLLen = accessURL.length;
+			accessURLLen = accessURL.length,
+            domain = webDAVEndpoint.replace(/^https?:\/\//i, "").split("/")[0],
+            path = webDAVEndpoint.replace(/^https?:\/\/[^\/]+/i, ""),
+            https = /^https/i.test(webDAVEndpoint);
 		if (accessURL[accessURLLen - 1] !== "/") {
 			accessURL += "/";
+            path += "/";
 		}
-		var endpoint = {
-			url: accessURL,
-			username: username,
-			password: password
-		};
+        var endpoint = extractURLDetails(webDAVEndpoint);
+        endpoint.username = username;
+        endpoint.password = password;
+        endpoint.url = accessURL;
 
 		return {
 

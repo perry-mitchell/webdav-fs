@@ -20,6 +20,10 @@
 		return fetchResponse._decode().then(function() { return fetchResponse._raw; });
 	}
 
+    function getHTTPModule(protocol) {
+        return (protocol === "https") ? require("https") : require("http");
+    }
+
     function handleResponseError(res) {
         if (res.status >= 400) {
             var err = new Error("Bad response: " + res.status);
@@ -113,6 +117,14 @@
 		return path.trim();
 	}
 
+    function sanitiseRemotePath2(path) {
+        path = path.trim();
+		if (path[0] !== "/") {
+			path ="/" + path;
+		}
+		return path;
+	}
+
 	module.exports = {
 
 		deletePath: function(auth, path) {
@@ -204,22 +216,42 @@
 				mime = "text/plain";
 			} else if (encoding === "binary") {
 				mime = "application/octet-stream";
-				if (typeof data !== "string") {
-					// Not a string, make a readable stream
-					data = Streamifier.createReadStream(data);
+				if (typeof data === "string") {
+                    data = new Buffer(data, "binary");
 				}
 			} else {
 				throw new Error("Unknown or unspecified encoding");
 			}
-			path = sanitiseRemotePath(path);
-			return fetch(auth.url + path, {
-					method: "PUT",
-					headers: {
-						"Content-Type": mime
-					},
-					body: data
-				})
-				.then(handleResponseError);
+			path = sanitiseRemotePath2(path);
+            var http = getHTTPModule(auth.protocol);
+            return new Promise(function(resolve, reject) {
+                var request = http.request(
+                    {
+                        host: auth.host,
+                        port: auth.port,
+                        path: path,
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": mime,
+                            "Content-Length": data.length
+                        }
+                    },
+                    function(response) {
+                        var statusCode = response.statusCode;
+                        if (statusCode >= 400) {
+                            var err = new Error("Server returned error: " + statusCode + " " +
+                                http.STATUS_CODES[statusCode]);
+                            err.httpStatusCode = statusCode;
+                            (reject)(err);
+                        } else {
+                            (resolve)();
+                        }
+                    }
+                );
+                request.on("error", reject);
+                request.write(data);
+                request.end();
+            });
 		},
 
 		putDir: function(auth, path) {
