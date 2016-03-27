@@ -115,3 +115,19 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
     console.error(err.message);
 });
 ```
+
+`writeFile` supports writing binary files as well:
+
+```
+fs.readFile(sourceFile, "binary", function(err, data) {
+    wfs.writeFile(destFile, data, "binary", function(err) {
+        // handle error
+    });
+});
+```
+
+`writeFile` supports just a couple of encodings:
+ * utf8
+ * binary
+
+When writing binary files, data must either be a binary string from a read file in Node (then passed to `new Buffer(data, "binary")`) or a Buffer.
