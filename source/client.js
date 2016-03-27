@@ -216,22 +216,13 @@
 				mime = "text/plain";
 			} else if (encoding === "binary") {
 				mime = "application/octet-stream";
-				if (typeof data !== "string") {
-					// Not a string, make a readable stream
-					//data = Streamifier.createReadStream(data);
+				if (typeof data === "string") {
+                    data = new Buffer(data, "binary");
 				}
 			} else {
 				throw new Error("Unknown or unspecified encoding");
 			}
 			path = sanitiseRemotePath2(path);
-			// return fetch(auth.url + path, {
-			// 		method: "PUT",
-			// 		headers: {
-			// 			"Content-Type": mime
-			// 		},
-			// 		body: data
-			// 	})
-			// 	.then(handleResponseError);
             var http = getHTTPModule(auth.protocol);
             return new Promise(function(resolve, reject) {
                 var request = http.request(

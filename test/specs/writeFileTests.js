@@ -83,9 +83,8 @@
                             if (err) {
                                 throw err;
                             }
-                            test.ok(finalData instanceof Buffer, "Data is a buffer");
-                            test.ok(finalData.equals && finalData.equals(data),
-                                "Data should be equal after writing");
+                            test.ok(finalData.length, "Length is OK");
+                            test.ok(finalData === data, "Data is the same");
                             test.done();
                         });
                     });
