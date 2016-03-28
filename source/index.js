@@ -3,7 +3,8 @@
 	"use strict";
 
 	var client = require("./client.js"),
-		processing = require("./processing.js");
+		processing = require("./processing.js"),
+        urlTools = require("url");
 
 	function executeCallbackAsync(callback, args) {
 		if (typeof setImmediate !== "undefined") {
@@ -28,6 +29,9 @@
             hostMatches = /^https?:\/\/(.+?)(\/.*)/i.exec(url);
         if (portMatches && portMatches[1]) {
             details.port = parseInt(portMatches[1], 10);
+        } else if (details.protocol === "https") {
+            // default to 443 for SSL
+            details.port = 443;
         }
         details.host = hostMatches[1].replace(/:\d+$/, "");
         details.path = /\/$/.test(hostMatches[2]) ? hostMatches[2] : hostMatches[2] + "/";
@@ -138,7 +142,7 @@
 				if (argc <= 2) {
 					throw new Error("Invalid number of arguments");
 				}
-				var path = args[0],
+				var path = urlTools.resolve(endpoint.path, args[0].replace(/^\//, "")),
 					data = args[1],
 					encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : undefined,
 					callback = function() {};

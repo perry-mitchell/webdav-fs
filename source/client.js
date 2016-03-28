@@ -9,6 +9,8 @@
 		Bro = require("./brototype.js"),
 		Streamifier = require("streamifier");
 
+    var STATUS_CODES = require("http").STATUS_CODES;
+
 	/**
 	 * Fetch raw data from a node-fetch response
 	 * @param {Object} fetchResponse The response from node-fetch
@@ -223,7 +225,15 @@
 				throw new Error("Unknown or unspecified encoding");
 			}
 			path = sanitiseRemotePath2(path);
-            var http = getHTTPModule(auth.protocol);
+            var http = getHTTPModule(auth.protocol),
+                headers = {
+                    "Content-Type": mime,
+                    "Content-Length": data.length
+                };
+            if (auth.username.length > 0) {
+                headers.Authorization = "Basic " +
+                    (new Buffer(auth.username + ":" + auth.password)).toString('base64');
+            }
             return new Promise(function(resolve, reject) {
                 var request = http.request(
                     {
@@ -231,16 +241,13 @@
                         port: auth.port,
                         path: path,
                         method: "PUT",
-                        headers: {
-                            "Content-Type": mime,
-                            "Content-Length": data.length
-                        }
+                        headers: headers
                     },
                     function(response) {
                         var statusCode = response.statusCode;
                         if (statusCode >= 400) {
                             var err = new Error("Server returned error: " + statusCode + " " +
-                                http.STATUS_CODES[statusCode]);
+                                STATUS_CODES[statusCode]);
                             err.httpStatusCode = statusCode;
                             (reject)(err);
                         } else {
