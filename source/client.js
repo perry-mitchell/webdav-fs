@@ -112,14 +112,14 @@
 		return "";
 	}
 
-	function sanitiseRemotePath(path) {
+	function removePathPrefixSlash(path) {
 		if (path[0] === "/") {
 			path = path.substr(1);
 		}
 		return path.trim();
 	}
 
-    function sanitiseRemotePath2(path) {
+    function enforcePathPrefixSlash(path) {
         path = path.trim();
 		if (path[0] !== "/") {
 			path ="/" + path;
@@ -130,7 +130,7 @@
 	module.exports = {
 
 		deletePath: function(auth, path) {
-			path = sanitiseRemotePath(path);
+			path = removePathPrefixSlash(path);
 			if (path.length <= 0 || path === "/") {
 				throw new Error("Cannot delete root");
 			}
@@ -141,7 +141,7 @@
 		},
 
 		getDir: function(auth, path) {
-			path = sanitiseRemotePath(path);
+			path = removePathPrefixSlash(path);
 			if (path.length <= 0) {
 				path = "/";
 			}
@@ -171,7 +171,7 @@
 
 		getFile: function(auth, path, encoding) {
 			encoding = (encoding || "utf8").toLowerCase();
-			path = sanitiseRemotePath(path);
+			path = removePathPrefixSlash(path);
 			return fetch(auth.url + path)
                 .then(handleResponseError)
 				.then(function(res) {
@@ -183,7 +183,7 @@
 		},
 
 		getStat: function(auth, path) {
-			path = sanitiseRemotePath(path);
+			path = removePathPrefixSlash(path);
 			if (path.length <= 0) {
 				path = "/";
 			}
@@ -211,6 +211,18 @@
 				});
 		},
 
+        moveFile: function(auth, remoteFilePath, targetFilePath) {
+            remoteFilePath = removePathPrefixSlash(remoteFilePath);
+            targetFilePath = removePathPrefixSlash(targetFilePath);
+            return fetch(auth.url + remoteFilePath, {
+                    method: "MOVE",
+                    headers: {
+                        Destination: auth.url + targetFilePath
+                    }
+                })
+                .then(handleResponseError);
+        },
+
 		putFile: function(auth, path, data, encoding) {
 			encoding = (encoding || "utf8").toLowerCase();
 			var mime;
@@ -224,7 +236,7 @@
 			} else {
 				throw new Error("Unknown or unspecified encoding");
 			}
-			path = sanitiseRemotePath2(path);
+			path = enforcePathPrefixSlash(path);
             var http = getHTTPModule(auth.protocol),
                 headers = {
                     "Content-Type": mime,
@@ -262,7 +274,7 @@
 		},
 
 		putDir: function(auth, path) {
-			path = sanitiseRemotePath(path);
+			path = removePathPrefixSlash(path);
 			return fetch(auth.url + path, {
 					method: "MKCOL"
 				})

@@ -112,6 +112,18 @@
 					);
 			},
 
+            rename: function(filePath, targetPath, callback) {
+                client.moveFile(endpoint, filePath, targetPath)
+					.then(
+						function() {
+							executeCallbackAsync(callback, [null]);
+						},
+						function(err) {
+							executeCallbackAsync(callback, [err]);
+						}
+					);
+            },
+
 			stat: function(path, callback) {
 				client.getStat(endpoint, path)
 					.then(function(data) {
