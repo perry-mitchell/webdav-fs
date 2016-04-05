@@ -78,6 +78,16 @@ wfs.readFile("/website/index.php", "utf8", function(error, data) {
 });
 ```
 
+### rename(currentPath, destinationPath, callback)
+
+Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
+
+```
+wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
+    // handle error
+});
+```
+
 ### stat(path, callback)
 
 Stat a remote file:
