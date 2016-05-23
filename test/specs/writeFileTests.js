@@ -41,7 +41,7 @@ module.exports = {
                 var txt = fs.readFileSync(targetFile, "utf8");
                 test.strictEqual(txt, "some text", "Read content should be accurate");
                 test.done();
-            })
+            });
         },
 
         testWriteData: function(test) {

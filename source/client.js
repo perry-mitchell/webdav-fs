@@ -77,7 +77,7 @@ function processDirectoryResult(path, dirResult, targetOnly) {
             item.mime = mime;
         }
         items.push(item);
-    })
+    });
     return items;
 }
 
