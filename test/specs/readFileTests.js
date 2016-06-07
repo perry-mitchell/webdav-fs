@@ -1,58 +1,54 @@
-(function(module) {
+"use strict";
 
-	"use strict";
+var webdavfs = require(__dirname + "/../../source/index.js"),
+    wfs      = webdavfs("http://localhost:9999/");
 
-	var webdavfs = require(__dirname + "/../../source/index.js"),
-		wfs = webdavfs("http://localhost:9999/");
+var jsDAV                  = require("jsDAV/lib/jsdav"),
+    jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 
-	var jsDAV = require("jsDAV/lib/jsdav"),
-		jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+module.exports = {
 
-	module.exports = {
+    setUp: function(done) {
+        this.server = jsDAV.createServer({
+            node: __dirname + "/../resources/dir1/",
+            locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data")
+        }, 9999);
+        setTimeout(done, 250);
+    },
 
-		setUp: function(done) {
-			this.server = jsDAV.createServer({
-				node: __dirname + "/../resources/dir1/",
-				locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data")
-			}, 9999);
-			setTimeout(done, 250);
-		},
+    tearDown: function(done) {
+        this.server.close(function() {
+            setTimeout(done, 100);
+        });
+    },
 
-		tearDown: function(done) {
-			this.server.close(function() {
-				setTimeout(done, 100);
-			});
-		},
+    readFile: {
 
-		readFile: {
+        testGetsTextContents: function(test) {
+            wfs.readFile("/index.txt", function(err, contents) {
+                test.ok(!err, "There should be no error getting file contents");
+                test.ok(contents.indexOf("[INDEX.TXT]") === 0, "The contents should match the remote file");
+                test.done();
+            });
+        },
 
-			testGetsTextContents: function(test) {
-				wfs.readFile("/index.txt", function(err, contents) {
-					test.ok(!err, "There should be no error getting file contents");
-					test.ok(contents.indexOf("[INDEX.TXT]") === 0, "The contents should match the remote file");
-					test.done();
-				});
-			},
+        testGetsDataContents: function(test) {
+            wfs.readFile("/index.txt", "binary", function(err, contents) {
+                test.ok(!err, "There should be no error getting file contents");
+                test.notStrictEqual(contents, "[INDEX.TXT]", "Contents should be a buffer");
+                test.strictEqual(contents[0].length, 11, "Contents should be of a certain length");
+                test.done();
+            });
+        },
 
-			testGetsDataContents: function(test) {
-				wfs.readFile("/index.txt", "binary", function(err, contents) {
-					test.ok(!err, "There should be no error getting file contents");
-					test.notStrictEqual(contents, "[INDEX.TXT]", "Contents should be a buffer");
-					test.strictEqual(contents[0].length, 11, "Contents should be of a certain length");
-					test.done();
-				});
-			},
+        testGetsBinaryDataContents: function(test) {
+            wfs.readFile("/bin.dat", "binary", function(err, contents) {
+                test.ok(!err, "There should be no error getting file contents");
+                test.strictEqual(contents[0].length, 1024, "Contents should be of a certain length");
+                test.done();
+            });
+        }
 
-			testGetsBinaryDataContents: function(test) {
-				wfs.readFile("/bin.dat", "binary", function(err, contents) {
-					test.ok(!err, "There should be no error getting file contents");
-					test.strictEqual(contents[0].length, 1024, "Contents should be of a certain length");
-					test.done();
-				});
-			}
+    }
 
-		}
-
-	};
-
-})(module);
+};
