@@ -1,8 +1,8 @@
 "use strict";
 
-var client = require("./client.js"),
-processing = require("./processing.js"),
-urlTools = require("url");
+var client     = require("./client.js"),
+    processing = require("./processing.js"),
+    urlTools   = require("url");
 
 function executeCallbackAsync(callback, args) {
     if (typeof setImmediate !== "undefined") {
@@ -18,13 +18,13 @@ function executeCallbackAsync(callback, args) {
 
 function extractURLDetails(url) {
     var details = {
-        host: undefined,
-        port: 80,
-        protocol: /^https/i.test(url) ? "https" : "http",
-        path: "/"
-    },
-    portMatches = /^https?:\/\/.+:(\d+)/i.exec(url),
-    hostMatches = /^https?:\/\/(.+?)(\/.*)/i.exec(url);
+            host: undefined,
+            port: 80,
+            protocol: /^https/i.test(url) ? "https" : "http",
+            path: "/"
+        },
+        portMatches = /^https?:\/\/.+:(\d+)/i.exec(url),
+        hostMatches = /^https?:\/\/(.+?)(\/.*)/i.exec(url);
     if (portMatches && portMatches[1]) {
         details.port = parseInt(portMatches[1], 10);
     } else if (details.protocol === "https") {
@@ -40,19 +40,19 @@ module.exports = function(webDAVEndpoint, username, password) {
     username = username || "";
     var accessURL = (username.length > 0) ?
     webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username + ":" + password + "@") :
-    webDAVEndpoint,
-    accessURLLen = accessURL.length,
-    domain = webDAVEndpoint.replace(/^https?:\/\//i, "").split("/")[0],
-    path = webDAVEndpoint.replace(/^https?:\/\/[^\/]+/i, ""),
-    https = /^https/i.test(webDAVEndpoint);
+        webDAVEndpoint,
+        accessURLLen = accessURL.length,
+        domain = webDAVEndpoint.replace(/^https?:\/\//i, "").split("/")[0],
+        path = webDAVEndpoint.replace(/^https?:\/\/[^\/]+/i, ""),
+        https = /^https/i.test(webDAVEndpoint);
     if (accessURL[accessURLLen - 1] !== "/") {
         accessURL += "/";
         path += "/";
     }
-    var endpoint = extractURLDetails(webDAVEndpoint);
-    endpoint.username = username;
-    endpoint.password = password;
-    endpoint.url = accessURL;
+    var endpoint          = extractURLDetails(webDAVEndpoint);
+        endpoint.username = username;
+        endpoint.password = password;
+        endpoint.url      = accessURL;
 
     return {
 
@@ -87,13 +87,13 @@ module.exports = function(webDAVEndpoint, username, password) {
 
         readFile: function(/* filename[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
-            argc = args.length;
+                argc = args.length;
             if (argc <= 1) {
                 throw new Error("Invalid number of arguments");
             }
-            var path = args[0],
-            encoding = (typeof args[1] === "string") ? args[1] : undefined,
-            callback = function() {};
+            var path     = args[0],
+                encoding = (typeof args[1] === "string") ? args[1] : undefined,
+                callback = function() {};
             if (typeof args[1] === "function") {
                 callback = args[1];
             } else if (argc >= 3 && typeof args[2] === "function") {
@@ -148,14 +148,14 @@ module.exports = function(webDAVEndpoint, username, password) {
 
         writeFile: function(/* filename, data[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
-            argc = args.length;
+                argc = args.length;
             if (argc <= 2) {
                 throw new Error("Invalid number of arguments");
             }
-            var path = urlTools.resolve(endpoint.path, args[0].replace(/^\//, "")),
-            data = args[1],
-            encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : undefined,
-            callback = function() {};
+            var path     = urlTools.resolve(endpoint.path, args[0].replace(/^\//, "")),
+                data     = args[1],
+                encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : undefined,
+                callback = function() {};
             if (typeof args[2] === "function") {
                 callback = args[2];
             } else if (argc >= 4 && typeof args[3] === "function") {

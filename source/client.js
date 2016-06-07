@@ -1,11 +1,11 @@
 "use strict";
 
-var fetch = require("node-fetch"),
-xml2js = require("xml2js"),
-querystring = require("querystring"),
-pathTools = require("path"),
-Bro = require("./brototype.js"),
-Streamifier = require("streamifier");
+var fetch       = require("node-fetch"),
+    xml2js      = require("xml2js"),
+    querystring = require("querystring"),
+    pathTools   = require("path"),
+    Bro         = require("./brototype.js"),
+    Streamifier = require("streamifier");
 
 var STATUS_CODES = require("http").STATUS_CODES;
 

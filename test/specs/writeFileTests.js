@@ -1,17 +1,17 @@
 "use strict";
 
 var webdavfs = require(__dirname + "/../../source/index.js"),
-wfs = webdavfs("http://localhost:9999/"),
-fs = require("fs"),
-isThere = require("is-there");
+    wfs      = webdavfs("http://localhost:9999/"),
+    fs       = require("fs"),
+    isThere  = require("is-there");
 
-var jsDAV = require("jsDAV/lib/jsdav"),
-jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+var jsDAV                  = require("jsDAV/lib/jsdav"),
+    jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 
 module.exports = {
 
     setUp: function(done) {
-        this.testFileName = __dirname + "/../resources/test.dat";
+        this.testFileName   = __dirname + "/../resources/test.dat";
         this.testSourceFile = __dirname + "/../resources/dir1/bin.dat";
         this.server = jsDAV.createServer({
             node: __dirname + "/../resources/",
@@ -68,7 +68,7 @@ module.exports = {
 
         testWriteFile: function(test) {
             var targetFile = this.testFileName,
-            sourceFile = this.testSourceFile;
+            sourceFile     = this.testSourceFile;
             fs.readFile(sourceFile, "binary", function(err, data) {
                 if (err) {
                     throw err;

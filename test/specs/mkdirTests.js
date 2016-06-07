@@ -1,12 +1,12 @@
 "use strict";
 
 var webdavfs = require(__dirname + "/../../source/index.js"),
-wfs = webdavfs("http://localhost:9999/"),
-isThere = require("is-there"),
-rimraf = require("rimraf").sync;
+    wfs      = webdavfs("http://localhost:9999/"),
+    isThere  = require("is-there"),
+    rimraf   = require("rimraf").sync;
 
-var jsDAV = require("jsDAV/lib/jsdav"),
-jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+var jsDAV                  = require("jsDAV/lib/jsdav"),
+    jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 
 module.exports = {
 

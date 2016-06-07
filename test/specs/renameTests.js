@@ -1,18 +1,18 @@
 "use strict";
 
 var webdavfs = require(__dirname + "/../../source/index.js"),
-wfs = webdavfs("http://localhost:9999/"),
-fs = require("fs"),
-isThere = require("is-there"),
-rimraf = require("rimraf").sync;
+    wfs      = webdavfs("http://localhost:9999/"),
+    fs       = require("fs"),
+    isThere  = require("is-there"),
+    rimraf   = require("rimraf").sync;
 
-var jsDAV = require("jsDAV/lib/jsdav"),
-jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+var jsDAV                  = require("jsDAV/lib/jsdav"),
+    jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 
 module.exports = {
 
     setUp: function(done) {
-        this.targetDir = __dirname + "/../resources/dir-rename/";
+        this.targetDir    = __dirname + "/../resources/dir-rename/";
         this.targetSubDir = this.targetDir + "sub/";
         if (isThere(this.targetDir)) {
             rimraf(this.targetDir);
