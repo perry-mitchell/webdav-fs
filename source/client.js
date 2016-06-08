@@ -56,7 +56,7 @@
 					path,
 					processXMLStringValue(responseBro.iCanHaz1("d:href", "D:href"))
 				).trim(),
-				resourceType = processXMLStringValue(propsBro.iCanHaz1("d:resourcetype", "D:resourcetype")),
+				resourceType = processXMLStringValue(propsBro.iCanHaz1("lp1:resourcetype", "d:resourcetype", "D:resourcetype")),
 				itemType = (resourceType.indexOf("d:collection") >= 0 || resourceType.indexOf("D:collection") >= 0) ?
 					"directory" : "file";
 			if (filename.length <= 0) {
@@ -70,8 +70,8 @@
 			var item = {
 					filename: filename,
 					basename: pathTools.basename(filename),
-					lastmod: processXMLStringValue(propsBro.iCanHaz1("d:getlastmodified", "D:getlastmodified")),
-					size: parseInt(processXMLStringValue(propsBro.iCanHaz1("d:getcontentlength", "D:getcontentlength")) || "0", 10),
+					lastmod: processXMLStringValue(propsBro.iCanHaz1("lp1:getlastmodified", "d:getlastmodified", "D:getlastmodified")),
+					size: parseInt(processXMLStringValue(propsBro.iCanHaz1("lp1:getcontentlength", "d:getcontentlength", "D:getcontentlength")) || "0", 10),
 					type: itemType
 				},
 				mime = propsBro.iCanHaz1("d:getcontenttype", "D:getcontenttype");
