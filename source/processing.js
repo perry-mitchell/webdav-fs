@@ -12,7 +12,8 @@
 				isDirectory: function() {
 					return itemInfo.type === "directory";
 				},
-				mtime: new Date(itemInfo.lastmod)
+				mtime: new Date(itemInfo.lastmod),
+				size: itemInfo.size || 0
 			};
 		}
 
