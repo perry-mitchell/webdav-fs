@@ -54,9 +54,7 @@
 			readdir: function(path, callback) {
 				client.getDir(endpoint, path)
 					.then(function(dirData) {
-						(callback)(null, dirData.map(function(dirEntry) {
-							return dirEntry.basename;
-						}));
+						(callback)(null, dirData);
 					})
 					.catch(function(err) {
 						(callback)(err, null);
