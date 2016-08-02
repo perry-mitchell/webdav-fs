@@ -85,6 +85,16 @@ module.exports = function(webDAVEndpoint, username, password) {
                 });
         },
 
+			readDataDir: function(path, callback) {
+				client.getDir(endpoint, path)
+					.then(function(dirData) {
+						(callback)(null, dirData);
+					})
+					.catch(function(err) {
+						(callback)(err, null);
+					});
+			},
+
         readFile: function(/* filename[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
                 argc = args.length;
