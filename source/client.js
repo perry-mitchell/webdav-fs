@@ -9,6 +9,14 @@ var fetch = require("node-fetch"),
 
 var STATUS_CODES = require("http").STATUS_CODES;
 
+function enforcePathPrefixSlash(path) {
+    path = path.trim();
+    if (path[0] !== "/") {
+        path ="/" + path;
+    }
+    return path;
+}
+
 /**
  * Fetch raw data from a node-fetch response
  * @param {Object} fetchResponse The response from node-fetch
@@ -115,14 +123,6 @@ function removePathPrefixSlash(path) {
         path = path.substr(1);
     }
     return path.trim();
-}
-
-function enforcePathPrefixSlash(path) {
-    path = path.trim();
-    if (path[0] !== "/") {
-        path ="/" + path;
-    }
-    return path;
 }
 
 module.exports = {
