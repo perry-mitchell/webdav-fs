@@ -67,16 +67,33 @@ module.exports = function(webDAVEndpoint, username, password) {
         },
 
         /**
+         * Readdir processing mode.
+         * When set to 'node', readdir will return an array of strings like Node's
+         * fs.readdir does. When set to 'stat', readdir will return an array of stat
+         * objects.
+         * @see stat
+         * @typedef {('node'|'stat')} ReadDirMode
+         */
+
+        /**
          * Read a directory synchronously.
          * Maps -> fs.readdir
          * @see https://nodejs.org/api/fs.html#fs_fs_readdir_path_callback
          * @param {String} path The path to read at
          * @param {Function} callback Callback: function(error, files)
+         * @param {ReadDirMode=} mode The readdir processing mode (default 'node')
+         * @see ReadDirMode
          */
-        readdir: function(path, callback) {
+        readdir: function(path, callback, mode) {
+            mode = mode || "node";
             client.getDir(endpoint, path)
                 .then(function(dirData) {
                     (callback)(null, dirData.map(function(dirEntry) {
+                        if (mode === "stat") {
+                            var fileStat = processing.createStat(dirEntry);
+                            fileStat.name = dirEntry.basename;
+                            return fileStat;
+                        }
                         return dirEntry.basename;
                     }));
                 })
@@ -84,16 +101,6 @@ module.exports = function(webDAVEndpoint, username, password) {
                     (callback)(err, null);
                 });
         },
-
-			readDataDir: function(path, callback) {
-				client.getDir(endpoint, path)
-					.then(function(dirData) {
-						(callback)(null, dirData);
-					})
-					.catch(function(err) {
-						(callback)(err, null);
-					});
-			},
 
         readFile: function(/* filename[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),

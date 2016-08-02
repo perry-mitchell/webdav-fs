@@ -57,7 +57,7 @@ wfs.mkdir("/remote/dir", function(error) {
 });
 ```
 
-### readdir(path, callback)
+### readdir(path, callback[, mode])
 
 Read the contents of a remote directory:
 
@@ -66,6 +66,11 @@ wfs.readdir("/some/remote/path/", function(error, contents) {
     // callback is an array of filenames
 });
 ```
+
+`mode` is an optional processing mode, where:
+
+ * 'node' (the default mode) will output an array of filename strings
+ * 'stat' will output an array of stat objects (plus a `name` field)
 
 ### readFile(path, [encoding,] callback)
 
