@@ -51,10 +51,10 @@
 			 * @param {String} path The path to read at
 			 * @param {Function} callback Callback: function(error, files)
 			 */
-			readDir: function(path, callback) {
+			readdir: function(path, callback) {
 				client.getDir(endpoint, path)
 					.then(function(dirData) {
-						(callback)(null, .map(function(dirEntry) {
+						(callback)(null, dirData.map(function(dirEntry) {
 				                        return dirEntry.basename;
 				                    }));
 					})
