@@ -60,7 +60,7 @@ function processDirectoryResult(path, dirResult, targetOnly) {
         //console.log(JSON.stringify(props, undefined, 4));
         var filename = processDirectoryResultFilename(
                 path,
-                processXMLStringValue(responseBro.iCanHaz1("d:href", "D:href"))
+                querystring.unescape(processXMLStringValue(responseBro.iCanHaz1("d:href", "D:href")))
             ).trim(),
             resourceType = processXMLStringValue(propsBro.iCanHaz1("lp1:resourcetype", "d:resourcetype", "D:resourcetype")),
             itemType = (resourceType.indexOf("d:collection") >= 0 || resourceType.indexOf("D:collection") >= 0) ?
@@ -72,7 +72,7 @@ function processDirectoryResult(path, dirResult, targetOnly) {
             // skip self or only self
             return;
         }
-        filename = querystring.unescape("/" + filename);
+        filename = "/" + filename;
         var item = {
                 filename: filename,
                 basename: pathTools.basename(filename),
