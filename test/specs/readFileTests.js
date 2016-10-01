@@ -38,7 +38,7 @@
 				wfs.readFile("/index.txt", "binary", function(err, contents) {
 					test.ok(!err, "There should be no error getting file contents");
 					test.notStrictEqual(contents, "[INDEX.TXT]", "Contents should be a buffer");
-					test.strictEqual(contents[0].length, 11, "Contents should be of a certain length");
+					test.strictEqual(contents.length, 11, "Contents should be of a certain length");
 					test.done();
 				});
 			},
@@ -46,7 +46,7 @@
 			testGetsBinaryDataContents: function(test) {
 				wfs.readFile("/bin.dat", "binary", function(err, contents) {
 					test.ok(!err, "There should be no error getting file contents");
-					test.strictEqual(contents[0].length, 1024, "Contents should be of a certain length");
+					test.strictEqual(contents.length, 1024, "Contents should be of a certain length");
 					test.done();
 				});
 			}

@@ -17,17 +17,6 @@ function enforcePathPrefixSlash(path) {
     return path;
 }
 
-/**
- * Fetch raw data from a node-fetch response
- * @param {Object} fetchResponse The response from node-fetch
- * @returns {Buffer}
- * @private
- * @static
- */
-function fetchRaw(fetchResponse) {
-    return fetchResponse._decode().then(function() { return fetchResponse._raw; });
-}
-
 function getHTTPModule(protocol) {
     return (protocol === "https") ? require("https") : require("http");
 }
@@ -176,7 +165,7 @@ module.exports = {
                 if (encoding === "utf8") {
                     return res.text();
                 }
-                return fetchRaw(res);
+                return res.buffer();
             });
     },
 
