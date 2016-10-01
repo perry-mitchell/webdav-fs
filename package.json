@@ -1,6 +1,6 @@
 {
   "name": "webdav-fs",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "WebDAV wrapper for Node's fs.",
   "main": "source/index.js",
   "scripts": {
@@ -13,7 +13,10 @@
   "keywords": [
     "webdav",
     "fs",
-    "node"
+    "node",
+    "remote",
+    "readFile",
+    "readdir"
   ],
   "author": "Perry Mitchell <perry@perrymitchell.net>",
   "license": "MIT",
