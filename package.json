@@ -28,6 +28,7 @@
     "brototype": "0.0.5",
     "node-fetch": "^1.6.3",
     "streamifier": "^0.1.1",
+    "webdav": "^0.1.0",
     "xml2js": "^0.4.13"
   },
   "devDependencies": {
