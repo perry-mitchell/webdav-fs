@@ -36,7 +36,7 @@
 
             testWriteText: function(test) {
                 var targetFile = this.testFileName;
-                wfs.writeFile("test.dat", "some text", function(err) {
+                wfs.writeFile("/test.dat", "some text", function(err) {
                     if (err) {
                         throw err;
                     }
@@ -50,7 +50,7 @@
                 var buffer = new Buffer(4),
                     targetFile = this.testFileName;
                 buffer.writeFloatBE(0xcafebabe, 0);
-                wfs.writeFile("test.dat", buffer, "binary", function(err) {
+                wfs.writeFile("/test.dat", buffer, "binary", function(err) {
                     if (err) {
                         throw err;
                     }
@@ -71,20 +71,20 @@
             testWriteFile: function(test) {
                 var targetFile = this.testFileName,
                     sourceFile = this.testSourceFile;
-                fs.readFile(sourceFile, "binary", function(err, data) {
+                fs.readFile(sourceFile, function(err, data) {
                     if (err) {
                         throw err;
                     }
-                    wfs.writeFile("test.dat", data, "binary", function(err) {
+                    wfs.writeFile("/test.dat", data, "binary", function(err) {
                         if (err) {
                             throw err;
                         }
-                        fs.readFile(targetFile, "binary", function(err, finalData) {
+                        fs.readFile(targetFile, function(err, finalData) {
                             if (err) {
                                 throw err;
                             }
                             test.ok(finalData.length, "Length is OK");
-                            test.ok(finalData === data, "Data is the same");
+                            test.ok(finalData.equals(data), "Data is the same");
                             test.done();
                         });
                     });
