@@ -88,7 +88,7 @@ module.exports = function(webDAVEndpoint, username, password) {
                 throw new Error("Invalid number of arguments");
             }
             var path = args[0],
-                encoding = (typeof args[1] === "string") ? args[1] : undefined,
+                encoding = (typeof args[1] === "string") ? args[1] : "text",
                 callback = function() {};
             if (typeof args[1] === "function") {
                 callback = args[1];
