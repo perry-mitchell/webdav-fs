@@ -1,10 +1,22 @@
 "use strict";
 
-var client = require("./client.js"),
-    processing = require("./processing.js"),
-    urlTools = require("url");
+var createWebDAVClient = require("webdav");
 
-function executeCallbackAsync(callback, args) {
+function __convertStat(data) {
+    return {
+        isDirectory: function() {
+            return data.type === "directory";
+        },
+        isFile: function() {
+            return data.type === "file";
+        },
+        mtime: (new Date(data.lastmod)).getTime(),
+        name: data.basename,
+        size: data.size || 0
+    };
+}
+
+function __executeCallbackAsync(callback, args) {
     if (typeof setImmediate !== "undefined") {
         setImmediate(function() {
             callback.apply(null, args);
@@ -16,54 +28,19 @@ function executeCallbackAsync(callback, args) {
     }
 }
 
-function extractURLDetails(url) {
-    var details = {
-            host: undefined,
-            port: 80,
-            protocol: /^https/i.test(url) ? "https" : "http",
-            path: "/"
-        },
-        portMatches = /^https?:\/\/.+:(\d+)/i.exec(url),
-        hostMatches = /^https?:\/\/(.+?)(\/.*)/i.exec(url);
-    if (portMatches && portMatches[1]) {
-        details.port = parseInt(portMatches[1], 10);
-    } else if (details.protocol === "https") {
-        // default to 443 for SSL
-        details.port = 443;
-    }
-    details.host = hostMatches[1].replace(/:\d+$/, "");
-    details.path = /\/$/.test(hostMatches[2]) ? hostMatches[2] : hostMatches[2] + "/";
-    return details;
-}
-
 module.exports = function(webDAVEndpoint, username, password) {
-    username = username || "";
-    var accessURL = (username.length > 0) ?
-            webDAVEndpoint.replace(/(https?:\/\/)/i, "$1" + username + ":" + password + "@") :
-            webDAVEndpoint,
-        accessURLLen = accessURL.length,
-        domain = webDAVEndpoint.replace(/^https?:\/\//i, "").split("/")[0],
-        path = webDAVEndpoint.replace(/^https?:\/\/[^\/]+/i, ""),
-        https = /^https/i.test(webDAVEndpoint);
-    if (accessURL[accessURLLen - 1] !== "/") {
-        accessURL += "/";
-        path += "/";
-    }
-    var endpoint = extractURLDetails(webDAVEndpoint);
-    endpoint.username = username;
-    endpoint.password = password;
-    endpoint.url = accessURL;
+
+    var client = createWebDAVClient(webDAVEndpoint, username, password);
 
     return {
 
-        mkdir: function(path, callback) {
-            client.putDir(endpoint, path)
+        mkdir: function(dirPath, callback) {
+            client
+                .createDirectory(dirPath)
                 .then(function() {
-                    executeCallbackAsync(callback, [null]);
+                    __executeCallbackAsync(callback, [null]);
                 })
-                .catch(function(err) {
-                    executeCallbackAsync(callback, [err]);
-                });
+                .catch(callback);
         },
 
         /**
@@ -84,22 +61,24 @@ module.exports = function(webDAVEndpoint, username, password) {
          * @param {ReadDirMode=} mode The readdir processing mode (default 'node')
          * @see ReadDirMode
          */
-        readdir: function(path, callback, mode) {
+        readdir: function(dirPath, callback, mode) {
             mode = mode || "node";
-            client.getDir(endpoint, path)
-                .then(function(dirData) {
-                    (callback)(null, dirData.map(function(dirEntry) {
-                        if (mode === "stat") {
-                            var fileStat = processing.createStat(dirEntry);
-                            fileStat.name = dirEntry.basename;
-                            return fileStat;
-                        }
-                        return dirEntry.basename;
-                    }));
+            client
+                .getDirectoryContents(dirPath)
+                .then(function(contents) {
+                    var results;
+                    if (mode === "node") {
+                        results = contents.map(function(statItem) {
+                            return statItem.basename;
+                        });
+                    } else if (mode === "stat") {
+                        results = contents.map(__convertStat);
+                    } else {
+                        throw new Error("Unknown mode: " + mode);
+                    }
+                    __executeCallbackAsync(callback, [null, results]);
                 })
-                .catch(function(err) {
-                    (callback)(err, null);
-                });
+                .catch(callback);
         },
 
         readFile: function(/* filename[, encoding], callback */) {
@@ -109,58 +88,47 @@ module.exports = function(webDAVEndpoint, username, password) {
                 throw new Error("Invalid number of arguments");
             }
             var path = args[0],
-                encoding = (typeof args[1] === "string") ? args[1] : undefined,
+                encoding = (typeof args[1] === "string") ? args[1] : "text",
                 callback = function() {};
             if (typeof args[1] === "function") {
                 callback = args[1];
             } else if (argc >= 3 && typeof args[2] === "function") {
                 callback = args[2];
             }
-            client.getFile(endpoint, path, encoding)
-                .then(
-                    function(data) {
-                        executeCallbackAsync(callback, [null, data]);
-                    },
-                    function(err) {
-                        executeCallbackAsync(callback, [err, null]);
-                    }
-                );
+            encoding = (encoding === "utf8") ? "text" : encoding;
+            client
+                .getFileContents(path, encoding)
+                .then(function(data) {
+                    __executeCallbackAsync(callback, [null, data]);
+                })
+                .catch(callback);
         },
 
         rename: function(filePath, targetPath, callback) {
-            client.moveFile(endpoint, filePath, targetPath)
-                .then(
-                    function() {
-                        executeCallbackAsync(callback, [null]);
-                    },
-                    function(err) {
-                        executeCallbackAsync(callback, [err]);
-                    }
-                );
-        },
-
-        stat: function(path, callback) {
-            client.getStat(endpoint, path)
-                .then(function(data) {
-                    if (data.length === 1) {
-                        executeCallbackAsync(callback, [null, processing.createStat(data[0])]);
-                    } else {
-                        executeCallbackAsync(callback, [new Error("Invalid response"), null]);
-                    }
-                })
-                .catch(function(err) {
-                    executeCallbackAsync(callback, [err, null]);
-                });
-        },
-
-        unlink: function(path, callback) {
-            client.deletePath(endpoint, path)
+            client
+                .moveFile(filePath, targetPath)
                 .then(function() {
-                    executeCallbackAsync(callback, [null]);
+                    __executeCallbackAsync(callback, [null]);
                 })
-                .catch(function(err) {
-                    executeCallbackAsync(callback, [err]);
-                });
+                .catch(callback);
+        },
+
+        stat: function(remotePath, callback) {
+            client
+                .stat(remotePath)
+                .then(function(stat) {
+                    __executeCallbackAsync(callback, [null, __convertStat(stat)]);
+                })
+                .catch(callback);
+        },
+
+        unlink: function(targetPath, callback) {
+            client
+                .deleteFile(targetPath)
+                .then(function() {
+                    __executeCallbackAsync(callback, [null]);
+                })
+                .catch(callback);
         },
 
         writeFile: function(/* filename, data[, encoding], callback */) {
@@ -169,24 +137,22 @@ module.exports = function(webDAVEndpoint, username, password) {
             if (argc <= 2) {
                 throw new Error("Invalid number of arguments");
             }
-            var path = urlTools.resolve(endpoint.path, args[0].replace(/^\//, "")),
+            var filePath = args[0],
                 data = args[1],
-                encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : undefined,
+                encoding = (argc >= 3 && typeof args[2] === "string") ? args[2] : "text",
                 callback = function() {};
             if (typeof args[2] === "function") {
                 callback = args[2];
             } else if (argc >= 4 && typeof args[3] === "function") {
                 callback = args[3];
             }
-            client.putFile(endpoint, path, data, encoding)
-                .then(
-                    function() {
-                        executeCallbackAsync(callback, [null]);
-                    },
-                    function(err) {
-                        executeCallbackAsync(callback, [err]);
-                    }
-                );
+            encoding = (encoding === "utf8") ? "text" : encoding;
+            client
+                .putFileContents(filePath, encoding, data)
+                .then(function() {
+                    __executeCallbackAsync(callback, [null]);
+                })
+                .catch(callback);
         }
 
     };

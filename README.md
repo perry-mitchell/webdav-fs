@@ -110,6 +110,7 @@ A stat has the following properties:
 | isFile   | Function | Check if the item is a file |
 | isDirectory | Function | Check if the item is a directory |
 | mtime | Number | Last modification timestamp |
+| size | Number | Size of the item in bytes |
 
 ### unlink(path, callback)
 
