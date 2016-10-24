@@ -1,5 +1,16 @@
 # WebDAV-fs changelog
 
+## v1.0.0-rc2
+_2016-10-24_
+
+ * Updated webdav-client to 0.1.1
+    * Fixes auth URLs with special characters in the username or password
+
+## v1.0.0-rc1
+_2016-10-15_
+
+ * Integrated [webdav-client](https://github.com/perry-mitchell/webdav-client) and moved core functionality there.
+
 ## v0.7.1
 _2016-10-01_
 
