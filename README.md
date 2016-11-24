@@ -17,7 +17,7 @@ npm install webdav-fs --save
 
 You can use webdav-fs in authenticated or non-authenticated mode:
 
-```
+```javascript
 // Using authentication:
 var wfs = require("webdav-fs")(
         "http://example.com/webdav/",
@@ -34,7 +34,7 @@ wfs.readdir("/Work", function(err, contents) {
 });
 ```
 
-```
+```javascript
 // Without using authentication:
 var wfs = require("webdav-fs")("http://example.com/webdav/");
 
@@ -51,7 +51,7 @@ The following methods are available on the `webdav-fs` module:
 
 Create a remote directory:
 
-```
+```javascript
 wfs.mkdir("/remote/dir", function(error) {
     // handle error if truthy
 });
@@ -61,7 +61,7 @@ wfs.mkdir("/remote/dir", function(error) {
 
 Read the contents of a remote directory:
 
-```
+```javascript
 wfs.readdir("/some/remote/path/", function(error, contents) {
     // callback is an array of filenames
 });
@@ -76,7 +76,7 @@ wfs.readdir("/some/remote/path/", function(error, contents) {
 
 Read the contents of a remote file:
 
-```
+```javascript
 wfs.readFile("/website/index.php", "utf8", function(error, data) {
     // data is the contents of the file
     // encoding is optional
@@ -87,7 +87,7 @@ wfs.readFile("/website/index.php", "utf8", function(error, data) {
 
 Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
 
-```
+```javascript
 wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
     // handle error
 });
@@ -97,7 +97,7 @@ wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
 
 Stat a remote file:
 
-```
+```javascript
 wfs.stat("/the-internet.dat", function(error, fileStat) {
     console.log(fileStat);
 });
@@ -116,7 +116,7 @@ A stat has the following properties:
 
 Delete a remote file or directory:
 
-```
+```javascript
 wfs.unlink("/remote/path", function(error) {
     // handle error if truthy
 });
@@ -126,7 +126,7 @@ wfs.unlink("/remote/path", function(error) {
 
 Write data to a remote file:
 
-```
+```javascript
 wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
     console.error(err.message);
 });
@@ -134,7 +134,7 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
 
 `writeFile` supports writing binary files as well:
 
-```
+```javascript
 fs.readFile(sourceFile, "binary", function(err, data) {
     wfs.writeFile(destFile, data, "binary", function(err) {
         // handle error
