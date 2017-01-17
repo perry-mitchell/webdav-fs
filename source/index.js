@@ -1,5 +1,7 @@
 "use strict";
 
+var TYPE_KEY = '@@fsType';
+
 var createWebDAVClient = require("webdav");
 
 function __convertStat(data) {
@@ -33,6 +35,9 @@ module.exports = function(webDAVEndpoint, username, password) {
     var client = createWebDAVClient(webDAVEndpoint, username, password);
 
     return {
+
+        // fs adapter type (for downstream integrations)
+        [TYPE_KEY]: "webdav-fs",
 
         mkdir: function(dirPath, callback) {
             client
