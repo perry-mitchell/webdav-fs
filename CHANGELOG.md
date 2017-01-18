@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.0.0-rc4
+_2017-01-18_
+
+ * Upgrade webdav (core) to 0.3.0
+   * Remove node querystring dependency (downstream support)
+
 ## v1.0.0-rc3
 _2017-01-17_
 
