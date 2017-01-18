@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.0.0-rc3
+_2017-01-17_
+
+ * Added **type** flag for downstream (any-fs) recognition
+ * Removed support for Node 0.12
+
 ## v1.0.0-rc2
 _2016-10-24_
 
