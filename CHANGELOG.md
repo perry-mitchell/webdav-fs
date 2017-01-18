@@ -1,6 +1,6 @@
 # WebDAV-fs changelog
 
-## v1.0.0-rc4
+## v1.0.0-rc5
 _2017-01-18_
 
  * Upgrade webdav (core) to 0.3.0

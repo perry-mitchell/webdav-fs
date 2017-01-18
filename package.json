@@ -1,6 +1,6 @@
 {
   "name": "webdav-fs",
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-rc5",
   "description": "WebDAV wrapper for Node's fs.",
   "main": "source/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "~0.3.0"
+    "webdav": "~0.3.1"
   },
   "devDependencies": {
     "is-there": "^4.2.0",
