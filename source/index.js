@@ -102,7 +102,7 @@ module.exports = function(webDAVEndpoint, username, password) {
             }
             encoding = (encoding === "utf8") ? "text" : encoding;
             client
-                .getFileContents(path, encoding)
+                .getFileContents(path, { format: encoding })
                 .then(function(data) {
                     __executeCallbackAsync(callback, [null, data]);
                 })
@@ -153,7 +153,7 @@ module.exports = function(webDAVEndpoint, username, password) {
             }
             encoding = (encoding === "utf8") ? "text" : encoding;
             client
-                .putFileContents(filePath, encoding, data)
+                .putFileContents(filePath, data, { format: encoding })
                 .then(function() {
                     __executeCallbackAsync(callback, [null]);
                 })
