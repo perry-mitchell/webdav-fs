@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.0.0-rc6
+_2017-02-05_
+
+ * Upgrade webdav to 0.4.1
+   * Custom header support
+
 ## v1.0.0-rc5
 _2017-01-18_
 
