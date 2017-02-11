@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.0.0-rc7
+_2017-02-11_
+
+ * Upgrade webdav to 0.5.0
+   * Use `window.fetch` where available
+
 ## v1.0.0-rc6
 _2017-02-05_
 
