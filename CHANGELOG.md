@@ -1,5 +1,12 @@
 # WebDAV-fs changelog
 
+## **v1.0.0**
+_2017-04-18_
+
+ * Upgrade webdav to 0.6.0
+   * Add support for non-prefixed response nodes
+   * HTTP response codes in errors
+
 ## v1.0.0-rc7
 _2017-02-11_
 
