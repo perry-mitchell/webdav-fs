@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.1.0
+_2017-06-03_
+
+ * Upgrade webdav to 0.7.0
+   * Remove lodash
+
 ## **v1.0.0**
 _2017-04-18_
 
