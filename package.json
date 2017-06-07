@@ -1,7 +1,7 @@
 {
   "name": "webdav-fs",
   "version": "1.1.0",
-  "description": "WebDAV wrapper for Node's fs.",
+  "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
   "scripts": {
     "test": "nodeunit test/specs/*.js"
@@ -16,7 +16,8 @@
     "node",
     "remote",
     "readFile",
-    "readdir"
+    "readdir",
+    "stream"
   ],
   "author": "Perry Mitchell <perry@perrymitchell.net>",
   "license": "MIT",
@@ -25,12 +26,12 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "~0.7.0"
+    "webdav": "~0.8.0"
   },
   "devDependencies": {
     "is-there": "^4.2.0",
     "jsDAV": "^0.3.3",
-    "nodeunit": "^0.9.1",
+    "nodeunit": "~0.11.1",
     "rimraf": "^2.4.3"
   }
 }
