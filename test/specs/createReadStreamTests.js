@@ -47,6 +47,14 @@ module.exports = {
                 test.strictEqual(buff.length, 300, "Stream length should be correct");
                 test.done();
             });
+        },
+
+        getsPartialContentsStartOnly: function(test) {
+            var stream = wfs.createReadStream("/bin.dat", { start: 768 });
+            streamToBuffer(stream, function(buff) {
+                test.strictEqual(buff.length, 256, "Stream length should be correct");
+                test.done();
+            });
         }
 
     }

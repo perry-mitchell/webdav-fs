@@ -59,7 +59,7 @@ module.exports = function(webDAVEndpoint, username, password) {
                 if (typeof options.headers === "object") {
                     clientOptions.headers = options.headers;
                 }
-                if (typeof options.start === "number" && typeof options.end === "number") {
+                if (typeof options.start === "number") {
                     clientOptions.range = { start: options.start, end: options.end };
                 }
             }
