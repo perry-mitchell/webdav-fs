@@ -57,7 +57,7 @@ wfs
     .pipe(fs.createWriteStream("./somefile.dat"));
 ```
 
-The `options` object supports overriding remote `headers` as well as a range (`start` and `end` as byte indexes).
+The `options` object supports overriding remote `headers` as well as a range (`start` and `end` as byte indexes). When specifying a range, only the `start` value is required (if `end` is not provided the rest of the file is read).
 
 The following requests the first 300 bytes of a file:
 
