@@ -3,7 +3,6 @@
 var TYPE_KEY = '@@fsType';
 
 var createWebDAVClient = require("webdav");
-var Readable = require('stream').Readable;
 
 function __convertStat(data) {
     return {
@@ -31,6 +30,14 @@ function __executeCallbackAsync(callback, args) {
     }
 }
 
+/**
+ * Options for createReadStream
+ * @typedef {Object} CreateReadStreamOptions
+ * @property {Number=} start - Byte index to start the range at (inclusive)
+ * @property {Number=} end - Byte index to end the range at (inclusive)
+ * @property {Object=} headers - Optionally override the headers
+ */
+
 module.exports = function(webDAVEndpoint, username, password) {
 
     var client = createWebDAVClient(webDAVEndpoint, username, password);
@@ -39,6 +46,25 @@ module.exports = function(webDAVEndpoint, username, password) {
 
         // fs adapter type (for downstream integrations)
         [TYPE_KEY]: "webdav-fs",
+
+        /**
+         * Create a read stream for a remote file
+         * @param {String} filePath The remote path
+         * @param {CreateReadStreamOptions=} options Options for the stream
+         * @returns {Readable} A readable stream
+         */
+        createReadStream: function(filePath, options) {
+            var clientOptions = {};
+            if (options && options !== null) {
+                if (typeof options.headers === "object") {
+                    clientOptions.headers = options.headers;
+                }
+                if (typeof options.start === "number" && typeof options.end === "number") {
+                    clientOptions.range = { start: options.start, end: options.end };
+                }
+            }
+            return client.createReadStream(filePath, clientOptions);
+        },
 
         mkdir: function(dirPath, callback) {
             client
@@ -108,24 +134,6 @@ module.exports = function(webDAVEndpoint, username, password) {
                     __executeCallbackAsync(callback, [null, data]);
                 })
                 .catch(callback);
-        },
-
-        createReadStream: function(path, options) {
-            options.encoding = (options.encoding === "utf8") ? "text" : options.encoding;
-            options.start = options.start || 0;
-            options.end = options.end || -1;
-
-            var s = new Readable();
-            s._read = function noop() {};
-
-            client
-                .getFileContents(path, { format: options.encoding || 'binary', headers: {'Range': 'bytes=' + options.start + '-' + options.end} })
-                .then(function(data) {
-                    s.push(data);
-                    s.push(null);
-                });
-
-            return s;
         },
 
         rename: function(filePath, targetPath, callback) {
