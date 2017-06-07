@@ -3,8 +3,7 @@
 var webdavfs = require(__dirname + "/../../source/index.js"),
     wfs = webdavfs("http://localhost:9999/");
 
-var streamLength = require("stream-length"),
-    jsDAV = require("jsDAV/lib/jsdav"),
+var jsDAV = require("jsDAV/lib/jsdav"),
     jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 
 function streamToBuffer(stream, cb) {
