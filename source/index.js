@@ -3,6 +3,7 @@
 var TYPE_KEY = '@@fsType';
 
 var createWebDAVClient = require("webdav");
+var Readable = require('stream').Readable;
 
 function __convertStat(data) {
     return {
@@ -107,6 +108,24 @@ module.exports = function(webDAVEndpoint, username, password) {
                     __executeCallbackAsync(callback, [null, data]);
                 })
                 .catch(callback);
+        },
+
+        createReadStream: function(path, options) {
+            options.encoding = (options.encoding === "utf8") ? "text" : options.encoding;
+            options.start = options.start || 0;
+            options.end = options.end || -1;
+
+            var s = new Readable();
+            s._read = function noop() {};
+
+            client
+                .getFileContents(path, { format: options.encoding || 'binary', headers: {'Range': 'bytes=' + options.start + '-' + options.end} })
+                .then(function(data) {
+                    s.push(data);
+                    s.push(null);
+                });
+
+            return s;
         },
 
         rename: function(filePath, targetPath, callback) {
