@@ -47,6 +47,24 @@ wfs.stat("/report.docx", function(err, data) {
 
 The following methods are available on the `webdav-fs` module:
 
+### createReadStream(path[, options])
+
+Create a read stream on a remote file:
+
+```javascript
+wfs
+    .createReadStream("/dir/somefile.dat")
+    .pipe(fs.createWriteStream("./somefile.dat"));
+```
+
+The `options` object supports overriding remote `headers` as well as a range (`start` and `end` as byte indexes).
+
+The following requests the first 300 bytes of a file:
+
+```javascript
+var myPartialStream = wfs.createReadStream("/dir/somefile.dat", { start: 0, end: 299 });
+```
+
 ### mkdir(path, callback)
 
 Create a remote directory:
