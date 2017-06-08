@@ -1,5 +1,10 @@
 # WebDAV-fs changelog
 
+## v1.2.0
+_2017-06-08_
+
+ * Add `createReadStream` method for streaming remote file contents (includes `start` and `end` support)
+
 ## v1.1.0
 _2017-06-03_
 
