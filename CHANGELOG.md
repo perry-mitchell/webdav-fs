@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.3.0
+_2017-06-24_
+
+ * Upgrade webdav to 0.10.0
+   * Disable `window.fetch` for improved stability
+
 ## v1.2.0
 _2017-06-08_
 
