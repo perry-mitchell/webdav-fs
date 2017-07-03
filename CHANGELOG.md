@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.4.0
+_2017-07-03_
+
+ * Upgrade webdav to 1.0.0-rc1
+ * Add `createWriteStream` method
+
 ## v1.3.0
 _2017-06-24_
 
