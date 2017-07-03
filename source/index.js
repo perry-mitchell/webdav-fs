@@ -38,6 +38,12 @@ function __executeCallbackAsync(callback, args) {
  * @property {Object=} headers - Optionally override the headers
  */
 
+/**
+ * Options for createWriteStream
+ * @typedef {Object} CreateWriteStreamOptions
+ * @property {Object=} headers - Optionally override the headers
+ */
+
 module.exports = function(webDAVEndpoint, username, password) {
 
     var client = createWebDAVClient(webDAVEndpoint, username, password);
@@ -64,6 +70,22 @@ module.exports = function(webDAVEndpoint, username, password) {
                 }
             }
             return client.createReadStream(filePath, clientOptions);
+        },
+
+        /**
+         * Create a write stream for a remote file
+         * @param {String} filePath The remote path
+         * @param {CreateWriteStreamOptions=} options Options for the stream
+         * @returns {Writeable} A writeable stream
+         */
+        createWriteStream: function(filePath, options) {
+            var clientOptions = {};
+            if (options && options !== null) {
+                if (typeof options.headers === "object") {
+                    clientOptions.headers = options.headers;
+                }
+            }
+            return client.createWriteStream(filePath, clientOptions);
         },
 
         mkdir: function(dirPath, callback) {

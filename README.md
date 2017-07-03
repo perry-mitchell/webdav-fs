@@ -65,6 +65,18 @@ The following requests the first 300 bytes of a file:
 var myPartialStream = wfs.createReadStream("/dir/somefile.dat", { start: 0, end: 299 });
 ```
 
+### createWriteStream(path[, options])
+
+Create a write stream for a remote file:
+
+```javascript
+fs
+    .createReadStream("./myFile.dat")
+    .pipe(wfs.createWriteStream("/data/myFile.dat"));
+```
+
+The `options` object supports overriding remote `headers`.
+
 ### mkdir(path, callback)
 
 Create a remote directory:

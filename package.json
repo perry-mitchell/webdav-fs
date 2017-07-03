@@ -26,12 +26,13 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "~0.10.0"
+    "webdav": "1.0.0-rc1"
   },
   "devDependencies": {
     "is-there": "^4.2.0",
     "jsDAV": "^0.3.3",
     "nodeunit": "~0.11.1",
-    "rimraf": "^2.4.3"
+    "rimraf": "^2.4.3",
+    "wait-on": "^2.0.2"
   }
 }
