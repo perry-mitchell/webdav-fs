@@ -44,7 +44,7 @@ function __executeCallbackAsync(callback, args) {
  * @property {Object=} headers - Optionally override the headers
  */
 
-module.exports = function(webDAVEndpoint, username, password) {
+function createWebDAVfs(webDAVEndpoint, username, password) {
 
     var client = createWebDAVClient(webDAVEndpoint, username, password);
 
@@ -113,7 +113,6 @@ module.exports = function(webDAVEndpoint, username, password) {
          * @param {String} path The path to read at
          * @param {Function} callback Callback: function(error, files)
          * @param {ReadDirMode=} mode The readdir processing mode (default 'node')
-         * @see ReadDirMode
          */
         readdir: function(dirPath, callback, mode) {
             mode = mode || "node";
@@ -212,3 +211,15 @@ module.exports = function(webDAVEndpoint, username, password) {
     };
 
 };
+
+/**
+ * Set the fetch-style method to use for requests
+ * This overrides the built-in fetch function in `webdav-client`, which is
+ * `node-fetch`.
+ * @see https://github.com/perry-mitchell/webdav-client#overriding-the-built-in-fetch-function
+ */
+createWebDAVfs.setFetchMethod = function setFetchMethod(fetchFn) {
+    createWebDAVClient.setFetchMethod(fetchFn);
+};
+
+module.exports = createWebDAVfs;
