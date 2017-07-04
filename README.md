@@ -177,3 +177,16 @@ fs.readFile(sourceFile, "binary", function(err, data) {
  * binary
 
 When writing binary files, data must either be a binary string from a read file in Node (then passed to `new Buffer(data, "binary")`) or a Buffer.
+
+## Usage
+
+### Overriding the built-in fetch function
+Under the hood, `webdav-client` uses [`node-fetch`](https://github.com/bitinn/node-fetch) to perform requests. This can be overridden by running the following:
+
+```js
+// For example, use the `fetch` method in the browser:
+const createWebDAVfs = require("webdav");
+createWebDAVfs.setFetchMethod(window.fetch);
+```
+
+Refer to [`webdav-client`'s documentation](https://github.com/perry-mitchell/webdav-client#overriding-the-built-in-fetch-function) for more information.
