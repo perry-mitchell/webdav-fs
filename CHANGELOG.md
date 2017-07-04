@@ -1,5 +1,10 @@
 # WebDAV-fs changelog
 
+## v1.5.0
+_2017-07-05_
+
+ * Expose webdav's `setFetchMethod` function
+
 ## v1.4.0
 _2017-07-03_
 
