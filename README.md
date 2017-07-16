@@ -185,7 +185,7 @@ Under the hood, `webdav-client` uses [`node-fetch`](https://github.com/bitinn/no
 
 ```js
 // For example, use the `fetch` method in the browser:
-const createWebDAVfs = require("webdav");
+const createWebDAVfs = require("webdav-fs");
 createWebDAVfs.setFetchMethod(window.fetch);
 ```
 
