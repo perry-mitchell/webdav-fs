@@ -184,6 +184,15 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        rmdir: function(targetPath, callback) {
+            client
+                .deleteFile(targetPath)
+                .then(function() {
+                    __executeCallbackAsync(callback, [null]);
+                })
+                .catch(callback);
+        },
+
         writeFile: function(/* filename, data[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
                 argc = args.length;
