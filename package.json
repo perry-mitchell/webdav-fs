@@ -4,7 +4,7 @@
   "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
   "scripts": {
-    "test": "nodeunit test/specs/*.js"
+    "test": "mocha -r test/specs/index.js test/specs/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,18 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "~1.0.0"
+    "webdav": "~1.0.1"
   },
   "devDependencies": {
-    "is-there": "^4.2.0",
-    "jsDAV": "^0.3.3",
-    "nodeunit": "~0.11.1",
-    "rimraf": "^2.4.3",
-    "wait-on": "^2.0.2"
+    "buffer-equals": "^1.0.4",
+    "chai": "^4.1.1",
+    "copy-dir": "^0.3.0",
+    "directory-exists": "^1.0.2",
+    "exists-file": "^3.0.2",
+    "mocha": "^3.5.0",
+    "rimraf": "^2.6.1",
+    "sinon": "^3.0.0",
+    "wait-on": "^2.0.2",
+    "webdav-server": "~2.2.3"
   }
 }
