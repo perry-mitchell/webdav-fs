@@ -1,7 +1,7 @@
 # webdav-fs
 Node `fs` wrapper for WebDAV. Perform basic filesystem tasks in a similar manner to using async `fs` methods like `readdir` and `writeFile`. `webdav-fs` uses [`webdav-client`](https://github.com/perry-mitchell/webdav-client) under the hood.
 
-[![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs)
+[![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs) [![Donate](https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_74x21.png)](https://paypal.me/perryjamesmitchell)
 
 [![webdav-fs on npm](https://nodei.co/npm/webdav-fs.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/webdav-fs) [![NPM](https://nodei.co/npm-dl/webdav-fs.png?months=3&height=2)](https://nodei.co/npm/webdav-fs/)
 
@@ -190,3 +190,8 @@ createWebDAVfs.setFetchMethod(window.fetch);
 ```
 
 Refer to [`webdav-client`'s documentation](https://github.com/perry-mitchell/webdav-client#overriding-the-built-in-fetch-function) for more information.
+
+## Supporting this project
+I develop this project in my free time as programming is my passion. I do not expect payment for what I make public, but all donations go towards supporting my development efforts. I use this money to pay for servers, software and other necessities. I greatly appreciate whatever I am given, no matter what the amount. If you've donated I'm extremely grateful for the help!
+
+[![Donate](https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_74x21.png)](https://paypal.me/perryjamesmitchell)
