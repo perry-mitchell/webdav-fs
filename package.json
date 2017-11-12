@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "~1.0.1"
+    "webdav": "~1.1.0"
   },
   "devDependencies": {
     "buffer-equals": "^1.0.4",

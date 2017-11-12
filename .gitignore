@@ -1,6 +1,7 @@
 *.log
 .history
 .vscode
+.DS_Store
 source/test.js
 test/testContents
 node_modules
