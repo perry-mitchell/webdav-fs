@@ -1,5 +1,10 @@
 # WebDAV-fs changelog
 
+## v1.6.0
+_2017-11-12_
+
+ * Upgrade webdav to 1.1.0
+
 ## v1.5.0
 _2017-07-05_
 

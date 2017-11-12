@@ -88,6 +88,11 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
             return client.createWriteStream(filePath, clientOptions);
         },
 
+        /**
+         * Create a remote directory
+         * @param {String} dirPath The remote path to create
+         * @param {Function} callback Callback: function(error)
+         */
         mkdir: function(dirPath, callback) {
             client
                 .createDirectory(dirPath)
@@ -134,6 +139,12 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Read the contents of a remote file
+         * @param {String} filename The remote file path to read
+         * @param {String=} encoding Optional file encoding to read (utf8/binary) (default: utf8)
+         * @param {Function} callback Callback: function(error, contents)
+         */
         readFile: function(/* filename[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
                 argc = args.length;
@@ -157,6 +168,12 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Rename a remote item
+         * @param {String} filePath The remote path to rename
+         * @param {String} targetPath The new path name of the item
+         * @param {Function} callback Callback: function(error)
+         */
         rename: function(filePath, targetPath, callback) {
             client
                 .moveFile(filePath, targetPath)
@@ -166,6 +183,12 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Remote remote directory
+         * @todo Check if remote is a directory before removing
+         * @param {String} targetPath Directory to remove
+         * @param {Function} callback Callback: function(error)
+         */
         rmdir: function(targetPath, callback) {
             client
                 .deleteFile(targetPath)
@@ -175,6 +198,11 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Stat a remote item
+         * @param {String} remotePath The remote item to stat
+         * @param {Function} callback Callback: function(error, stat)
+         */
         stat: function(remotePath, callback) {
             client
                 .stat(remotePath)
@@ -184,6 +212,11 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Unlink (delete) a remote file
+         * @param {String} targetPath The remote file path to delete
+         * @param {Function} callback Callback: function(error)
+         */
         unlink: function(targetPath, callback) {
             client
                 .deleteFile(targetPath)
@@ -193,6 +226,13 @@ function createWebDAVfs(webDAVEndpoint, username, password) {
                 .catch(callback);
         },
 
+        /**
+         * Write data to a remote file
+         * @param {String} filename The remote file path to write to
+         * @param {Buffer|String} data The data to write
+         * @param {String=} encoding Optional encoding to write as (utf8/binary) (default: utf8)
+         * @param {Function} callback Callback: function(error)
+         */
         writeFile: function(/* filename, data[, encoding], callback */) {
             var args = Array.prototype.slice.call(arguments),
                 argc = args.length;

@@ -45,6 +45,8 @@ wfs.stat("/report.docx", function(err, data) {
 
 ## API
 
+You can read the [API documentation here](https://github.com/perry-mitchell/webdav-fs/blob/master/API.md), or check out the examples below.
+
 The following methods are available on the `webdav-fs` module:
 
 ### createReadStream(path[, options])

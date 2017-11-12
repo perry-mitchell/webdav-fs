@@ -1,9 +1,10 @@
 {
   "name": "webdav-fs",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
   "scripts": {
+    "docs": "jsdoc2md source/index.js > API.md",
     "test": "mocha -r test/specs/index.js test/specs/**/*.js"
   },
   "repository": {
@@ -34,6 +35,7 @@
     "copy-dir": "^0.3.0",
     "directory-exists": "^1.0.2",
     "exists-file": "^3.0.2",
+    "jsdoc-to-markdown": "^3.0.1",
     "mocha": "^3.5.0",
     "rimraf": "^2.6.1",
     "sinon": "^3.0.0",
