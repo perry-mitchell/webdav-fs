@@ -1,9 +1,7 @@
 # webdav-fs
 Node `fs` wrapper for WebDAV. Perform basic filesystem tasks in a similar manner to using async `fs` methods like `readdir` and `writeFile`. `webdav-fs` uses [`webdav-client`](https://github.com/perry-mitchell/webdav-client) under the hood.
 
-[![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs) [![Donate](https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_74x21.png)](https://paypal.me/perryjamesmitchell)
-
-[![webdav-fs on npm](https://nodei.co/npm/webdav-fs.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/webdav-fs) [![NPM](https://nodei.co/npm-dl/webdav-fs.png?months=3&height=2)](https://nodei.co/npm/webdav-fs/)
+[![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs) [![npm version](https://badge.fury.io/js/webdav-fs.svg)](https://www.npmjs.com/package/webdav-fs) [![npm downloads](https://img.shields.io/npm/dm/webdav-fs.svg)](https://www.npmjs.com/package/webdav-fs) [![Donate](https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_74x21.png)](https://paypal.me/perryjamesmitchell)
 
 ## Installation
 
