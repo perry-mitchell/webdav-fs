@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.7.0
+_2018-02-21_
+
+ * Update dependencies
+ * Update webdav to 1.1.2 (Fix directory contents bug)
+
 ## v1.6.0
 _2017-11-12_
 
