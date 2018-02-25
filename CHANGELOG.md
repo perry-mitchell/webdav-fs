@@ -1,5 +1,10 @@
 # WebDAV-fs changelog
 
+## v1.8.0
+_2018-02-25_
+
+ * Update webdav to 1.2.0 (Fix unicode paths)
+
 ## v1.7.0
 _2018-02-21_
 
