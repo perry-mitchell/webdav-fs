@@ -1,5 +1,10 @@
 # WebDAV-fs changelog
 
+## v1.9.0
+_2018-03-15_
+
+ * Update webdav to 1.4.0 (Change deepmerge to merge)
+
 ## v1.8.0
 _2018-02-25_
 
