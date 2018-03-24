@@ -1,5 +1,12 @@
 # WebDAV-fs changelog
 
+## v1.10.0
+_2018-03-24_
+
+ * Update webdav to 1.5.1
+   * Fix path encoding bug
+   * Add [OAuth2 authentication](https://github.com/perry-mitchell/webdav-client#authentication) support
+
 ## v1.9.0
 _2018-03-15_
 
