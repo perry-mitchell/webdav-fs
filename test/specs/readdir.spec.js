@@ -27,19 +27,25 @@ describe("readdir", function() {
         });
     });
 
-    // // This should work in the future:
-    // it("reads the contents of a directory with non-latin characters", function(done) {
-    //     this.client.readdir("/방각하éàöåçΘΣฐ", (err, contents) => {
-    //         console.log(err, contents);
-    //         expect(err).to.be.null;
-    //         expect(contents).to.contain("file.txt");
-    //         done();
-    //     });
-    // });
+    it("reads the contents of a directory with non-latin characters", function(done) {
+        this.client.readdir("/방각하éàöåçΘΣฐ", (err, contents) => {
+            expect(err).to.be.null;
+            expect(contents).to.contain("file.txt");
+            done();
+        });
+    });
 
     it("throws an error if the directory doesn't exist", function(done) {
         this.client.readdir("/non-existent", (err, contents) => {
             expect(err.message).to.match(/Not Found/i);
+            done();
+        });
+    });
+
+    it("returns only the expected contents when using trailing slashes (#56)", function(done) {
+        this.client.readdir("/dir1/", (err, contents) => {
+            expect(err).to.be.null;
+            expect(contents).to.deep.equal(["dir2"]);
             done();
         });
     });
