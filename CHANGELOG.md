@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.10.1
+_2018-03-25_
+
+ * Update webdav to 1.5.2
+   * ([#56](https://github.com/perry-mitchell/webdav-fs/issues/56)) `readdir` includes parent directory
+
 ## v1.10.0
 _2018-03-24_
 
