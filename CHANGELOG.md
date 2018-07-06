@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v1.10.2
+_2018-07-07_
+
+ * Update webdav to 1.5.3
+   * Bugfix: Fix encoding issues with special characters
+
 ## v1.10.1
 _2018-03-25_
 
