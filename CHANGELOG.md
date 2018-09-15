@@ -1,39 +1,47 @@
 # WebDAV-fs changelog
 
+## v1.11.0
+_2018-09-15_
+
+ * Upgrade webdav to 1.6.0
+   * **Bugfix**: Directory contents fetch fails on Windows
+   * **Bugfix**: Moving items to directories with spaces fails
+ * Update dependencies, audit
+
 ## v1.10.2
 _2018-07-07_
 
- * Update webdav to 1.5.3
+ * Upgrade webdav to 1.5.3
    * Bugfix: Fix encoding issues with special characters
 
 ## v1.10.1
 _2018-03-25_
 
- * Update webdav to 1.5.2
+ * Upgrade webdav to 1.5.2
    * ([#56](https://github.com/perry-mitchell/webdav-fs/issues/56)) `readdir` includes parent directory
 
 ## v1.10.0
 _2018-03-24_
 
- * Update webdav to 1.5.1
+ * Upgrade webdav to 1.5.1
    * Fix path encoding bug
    * Add [OAuth2 authentication](https://github.com/perry-mitchell/webdav-client#authentication) support
 
 ## v1.9.0
 _2018-03-15_
 
- * Update webdav to 1.4.0 (Change deepmerge to merge)
+ * Upgrade webdav to 1.4.0 (Change deepmerge to merge)
 
 ## v1.8.0
 _2018-02-25_
 
- * Update webdav to 1.2.0 (Fix unicode paths)
+ * Upgrade webdav to 1.2.0 (Fix unicode paths)
 
 ## v1.7.0
 _2018-02-21_
 
  * Update dependencies
- * Update webdav to 1.1.2 (Fix directory contents bug)
+ * Upgrade webdav to 1.1.2 (Fix directory contents bug)
 
 ## v1.6.0
 _2017-11-12_
