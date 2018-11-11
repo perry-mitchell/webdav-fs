@@ -1,5 +1,13 @@
 # WebDAV-fs changelog
 
+## v1.12.0
+_2018-11-11_
+
+ * Expose `agent` parameter in constructor to support custom HTTP/S agents being passed
+ * Upgrade webdav to 1.6.1
+   * **Bugfix**: Requests fail on Seafile instances
+   * Removed restrictive namespace detection on responses
+
 ## v1.11.0
 _2018-09-15_
 
