@@ -194,9 +194,9 @@ Options for createReadStream
 
 | Name | Type | Description |
 | --- | --- | --- |
-| start | <code>Number</code> | Byte index to start the range at (inclusive) |
-| end | <code>Number</code> | Byte index to end the range at (inclusive) |
-| headers | <code>Object</code> | Optionally override the headers |
+| [start] | <code>Number</code> | Byte index to start the range at (inclusive) |
+| [end] | <code>Number</code> | Byte index to end the range at (inclusive) |
+| [headers] | <code>Object</code> | Optionally override the headers |
 
 <a name="CreateWriteStreamOptions"></a>
 
@@ -208,7 +208,7 @@ Options for createWriteStream
 
 | Name | Type | Description |
 | --- | --- | --- |
-| headers | <code>Object</code> | Optionally override the headers |
+| [headers] | <code>Object</code> | Optionally override the headers |
 
 <a name="ReadDirMode"></a>
 
