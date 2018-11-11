@@ -44,9 +44,9 @@ function __executeCallbackAsync(callback, args) {
  * @property {Object=} headers - Optionally override the headers
  */
 
-function createWebDAVfs(webDAVEndpoint, username, password) {
+function createWebDAVfs(webDAVEndpoint, username, password, agent) {
 
-    var client = createWebDAVClient(webDAVEndpoint, username, password);
+    var client = createWebDAVClient(webDAVEndpoint, username, password, agent);
 
     return {
 
