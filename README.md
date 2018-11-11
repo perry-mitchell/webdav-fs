@@ -18,10 +18,10 @@ You can use webdav-fs in authenticated or non-authenticated mode:
 ```javascript
 // Using authentication:
 var wfs = require("webdav-fs")(
-        "http://example.com/webdav/",
-        "username",
-        "password"
-    );
+    "http://example.com/webdav/",
+    "username",
+    "password"
+);
 
 wfs.readdir("/Work", function(err, contents) {
     if (!err) {
@@ -46,16 +46,16 @@ For more control over the HTTP/TLS connection options, you can pass an instance 
 
 ```javascript
 var agent = require("https").Agent({
-    keepAlive: true,
+    keepAlive: true
     // we can also control certificate verification behaviour here
-})
+});
 
 var wfs = require("webdav-fs")(
-        "https://example.com/webdav/",
-        "username",
-        "password",
-        agent
-    );
+    "https://example.com/webdav/",
+    "username",
+    "password",
+    agent
+);
 ```
 
 

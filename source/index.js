@@ -45,7 +45,6 @@ function __executeCallbackAsync(callback, args) {
  */
 
 function createWebDAVfs(webDAVEndpoint, username, password, agent) {
-
     var client = createWebDAVClient(webDAVEndpoint, username, password, agent);
 
     return {
