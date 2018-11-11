@@ -11,7 +11,7 @@ Install webdav-fs using npm:
 npm install webdav-fs --save
 ```
 
-## Example
+## Examples
 
 You can use webdav-fs in authenticated or non-authenticated mode:
 
@@ -40,6 +40,24 @@ wfs.stat("/report.docx", function(err, data) {
     console.log("Is file:", data.isFile());
 });
 ```
+
+For more control over the HTTP/TLS connection options, you can pass an instance of [`http.Agent`](https://nodejs.org/api/http.html#http_class_http_agent)
+ or [`https.Agent`](https://nodejs.org/api/https.html#https_class_https_agent):
+
+```javascript
+var agent = require("https").Agent({
+    keepAlive: true,
+    // we can also control certificate verification behaviour here
+})
+
+var wfs = require("webdav-fs")(
+        "https://example.com/webdav/",
+        "username",
+        "password",
+        agent
+    );
+```
+
 
 ## API
 
