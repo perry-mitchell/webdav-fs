@@ -23,11 +23,11 @@ var wfs = require("webdav-fs")(
     "password"
 );
 
-wfs.readdir("/Work", function(err, contents) {
-    if (!err) {
+wfs.readdir("/Work", function(error, contents) {
+    if (!error) {
         console.log("Dir contents:", contents);
     } else {
-        console.log("Error:", err.message);
+        console.log("Error:", error.message);
     }
 });
 ```
@@ -175,8 +175,10 @@ wfs.unlink("/remote/path", function(error) {
 Write data to a remote file:
 
 ```javascript
-wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
-    console.error(err.message);
+wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(error) {
+    if (error) {
+        console.error(error.message);
+    }
 });
 ```
 
@@ -184,7 +186,7 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
 
 ```javascript
 fs.readFile(sourceFile, "binary", function(err, data) {
-    wfs.writeFile(destFile, data, "binary", function(err) {
+    wfs.writeFile(destFile, data, "binary", function(error) {
         // handle error
     });
 });
