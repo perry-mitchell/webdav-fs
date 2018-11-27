@@ -101,7 +101,7 @@ Create a remote directory:
 
 ```javascript
 wfs.mkdir("/remote/dir", function(err) {
-    // handle err if truthy
+    // handle error if truthy
 });
 ```
 
@@ -137,7 +137,7 @@ Move/rename a file to another location/name. This does not create new directorie
 
 ```javascript
 wfs.rename("/my-document.docx", "/Documents/personal.docx", function (err) {
-    // handle err
+    // handle error
 });
 ```
 
@@ -166,7 +166,7 @@ Delete a remote file or directory:
 
 ```javascript
 wfs.unlink("/remote/path", function(err) {
-    // handle err if truthy
+    // handle error if truthy
 });
 ```
 
@@ -177,7 +177,7 @@ Write data to a remote file:
 ```javascript
 wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
     if (err) {
-        console.err(err.message);
+        console.error(err.message);
     }
 });
 ```
@@ -187,7 +187,7 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
 ```javascript
 fs.readFile(sourceFile, "binary", function(err, data) {
     wfs.writeFile(destFile, data, "binary", function(err) {
-        // handle err
+        // handle error
     });
 });
 ```
