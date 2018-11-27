@@ -23,11 +23,11 @@ var wfs = require("webdav-fs")(
     "password"
 );
 
-wfs.readdir("/Work", function(error, contents) {
-    if (!error) {
+wfs.readdir("/Work", function(err, contents) {
+    if (!err) {
         console.log("Dir contents:", contents);
     } else {
-        console.log("Error:", error.message);
+        console.log("Error:", err.message);
     }
 });
 ```
@@ -100,8 +100,8 @@ The `options` object supports overriding remote `headers`.
 Create a remote directory:
 
 ```javascript
-wfs.mkdir("/remote/dir", function(error) {
-    // handle error if truthy
+wfs.mkdir("/remote/dir", function(err) {
+    // handle err if truthy
 });
 ```
 
@@ -110,7 +110,7 @@ wfs.mkdir("/remote/dir", function(error) {
 Read the contents of a remote directory:
 
 ```javascript
-wfs.readdir("/some/remote/path/", function(error, contents) {
+wfs.readdir("/some/remote/path/", function(err, contents) {
     // callback is an array of filenames
 });
 ```
@@ -125,7 +125,7 @@ wfs.readdir("/some/remote/path/", function(error, contents) {
 Read the contents of a remote file:
 
 ```javascript
-wfs.readFile("/website/index.php", "utf8", function(error, data) {
+wfs.readFile("/website/index.php", "utf8", function(err, data) {
     // data is the contents of the file
     // encoding is optional
 });
@@ -136,8 +136,8 @@ wfs.readFile("/website/index.php", "utf8", function(error, data) {
 Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
 
 ```javascript
-wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
-    // handle error
+wfs.rename("/my-document.docx", "/Documents/personal.docx", function (err) {
+    // handle err
 });
 ```
 
@@ -146,7 +146,7 @@ wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
 Stat a remote file:
 
 ```javascript
-wfs.stat("/the-internet.dat", function(error, fileStat) {
+wfs.stat("/the-internet.dat", function(err, fileStat) {
     console.log(fileStat);
 });
 ```
@@ -165,8 +165,8 @@ A stat has the following properties:
 Delete a remote file or directory:
 
 ```javascript
-wfs.unlink("/remote/path", function(error) {
-    // handle error if truthy
+wfs.unlink("/remote/path", function(err) {
+    // handle err if truthy
 });
 ```
 
@@ -175,9 +175,9 @@ wfs.unlink("/remote/path", function(error) {
 Write data to a remote file:
 
 ```javascript
-wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(error) {
-    if (error) {
-        console.error(error.message);
+wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
+    if (err) {
+        console.err(err.message);
     }
 });
 ```
@@ -186,8 +186,8 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
 
 ```javascript
 fs.readFile(sourceFile, "binary", function(err, data) {
-    wfs.writeFile(destFile, data, "binary", function(error) {
-        // handle error
+    wfs.writeFile(destFile, data, "binary", function(err) {
+        // handle err
     });
 });
 ```
