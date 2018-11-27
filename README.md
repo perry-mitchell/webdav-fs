@@ -100,7 +100,7 @@ The `options` object supports overriding remote `headers`.
 Create a remote directory:
 
 ```javascript
-wfs.mkdir("/remote/dir", function(error) {
+wfs.mkdir("/remote/dir", function(err) {
     // handle error if truthy
 });
 ```
@@ -110,7 +110,7 @@ wfs.mkdir("/remote/dir", function(error) {
 Read the contents of a remote directory:
 
 ```javascript
-wfs.readdir("/some/remote/path/", function(error, contents) {
+wfs.readdir("/some/remote/path/", function(err, contents) {
     // callback is an array of filenames
 });
 ```
@@ -125,7 +125,7 @@ wfs.readdir("/some/remote/path/", function(error, contents) {
 Read the contents of a remote file:
 
 ```javascript
-wfs.readFile("/website/index.php", "utf8", function(error, data) {
+wfs.readFile("/website/index.php", "utf8", function(err, data) {
     // data is the contents of the file
     // encoding is optional
 });
@@ -136,7 +136,7 @@ wfs.readFile("/website/index.php", "utf8", function(error, data) {
 Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
 
 ```javascript
-wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
+wfs.rename("/my-document.docx", "/Documents/personal.docx", function (err) {
     // handle error
 });
 ```
@@ -146,7 +146,7 @@ wfs.rename("/my-document.docx", "/Documents/personal.docx", function (error) {
 Stat a remote file:
 
 ```javascript
-wfs.stat("/the-internet.dat", function(error, fileStat) {
+wfs.stat("/the-internet.dat", function(err, fileStat) {
     console.log(fileStat);
 });
 ```
@@ -165,7 +165,7 @@ A stat has the following properties:
 Delete a remote file or directory:
 
 ```javascript
-wfs.unlink("/remote/path", function(error) {
+wfs.unlink("/remote/path", function(err) {
     // handle error if truthy
 });
 ```
@@ -176,7 +176,9 @@ Write data to a remote file:
 
 ```javascript
 wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
-    console.error(err.message);
+    if (err) {
+        console.error(err.message);
+    }
 });
 ```
 
