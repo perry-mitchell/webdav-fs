@@ -1,8 +1,6 @@
-"use strict";
+const { createClient } = require("webdav");
 
-var TYPE_KEY = '@@fsType';
-
-var createWebDAVClient = require("webdav");
+const TYPE_KEY = '@@fsType';
 
 function __convertStat(data) {
     return {
@@ -44,11 +42,26 @@ function __executeCallbackAsync(callback, args) {
  * @property {Object=} headers - Optionally override the headers
  */
 
-function createWebDAVfs(webDAVEndpoint, username, password, agent) {
-    var client = createWebDAVClient(webDAVEndpoint, username, password, agent);
+/**
+ * Adapter options, which match to the underlying WebDAV-client API:
+ *  {@link https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient|WebDAV-Client API}
+ * @typedef {Object} ClientOptions
+ * @property {String=} username The username to use for authentication
+ * @property {String=} password The password to use for authentication
+ * @property {https.Agent=} httpsAgent Override for the HTTPS agent
+ * @property {http.Agent=} httpAgent Override for the HTTP agent
+ * @property {Object=} token Optional token override for OAuth
+ */
 
+/**
+ * Create a new client adapter
+ * @param {String} webDAVEndpoint The WebDAV server URL
+ * @param {Object=} options Connection options for the client:
+ *  {@link https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient|WebDAV-Client API}
+ */
+function createWebDAVfs(webDAVEndpoint, options = {}) {
+    const client = createClient(webDAVEndpoint, options);
     return {
-
         // fs adapter type (for downstream integrations)
         [TYPE_KEY]: "webdav-fs",
 
@@ -58,7 +71,7 @@ function createWebDAVfs(webDAVEndpoint, username, password, agent) {
          * @param {CreateReadStreamOptions=} options Options for the stream
          * @returns {Readable} A readable stream
          */
-        createReadStream: function(filePath, options) {
+        createReadStream: (filePath, options) => {
             var clientOptions = {};
             if (options && options !== null) {
                 if (typeof options.headers === "object") {
