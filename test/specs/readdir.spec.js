@@ -37,7 +37,7 @@ describe("readdir", function() {
 
     it("throws an error if the directory doesn't exist", function(done) {
         this.client.readdir("/non-existent", (err, contents) => {
-            expect(err.message).to.match(/Not Found/i);
+            expect(err.message).to.match(/status code 404/i);
             done();
         });
     });
