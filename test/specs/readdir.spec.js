@@ -53,34 +53,34 @@ describe("readdir", function() {
     describe("using mode 'stat'", function() {
 
         it("reads the contents of a directory", function(done) {
-            this.client.readdir("/", (err, contents) => {
+            this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
                 const subfolder = contents.find(item => item.name === "sub folder");
                 const fractal = contents.find(item => item.name === "fractal.jpg");
                 expect(subfolder).to.be.an("object");
                 expect(fractal).to.be.an("object");
                 done();
-            }, "stat");
+            });
         });
 
         it("provides isFile method", function(done) {
-            this.client.readdir("/", (err, contents) => {
+            this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
                 const fractal = contents.find(item => item.name === "fractal.jpg");
                 expect(fractal).to.have.property("isFile").that.is.a("function");
                 expect(fractal.isFile()).to.be.true;
                 done();
-            }, "stat");
+            });
         });
 
         it("provides isDirectory method", function(done) {
-            this.client.readdir("/", (err, contents) => {
+            this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
                 const subfolder = contents.find(item => item.name === "sub folder");
                 expect(subfolder).to.have.property("isDirectory").that.is.a("function");
                 expect(subfolder.isDirectory()).to.be.true;
                 done();
-            }, "stat");
+            });
         });
 
     });
