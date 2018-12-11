@@ -1,6 +1,6 @@
 {
   "name": "webdav-fs",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0",
   "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
   "scripts": {
