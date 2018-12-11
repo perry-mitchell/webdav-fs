@@ -1,5 +1,12 @@
 # WebDAV-fs changelog
 
+## v2.0.0
+_2018-12-11_
+
+ * Upgrade webdav to 2.0.0
+   * Use **axios** instead of node-fetch
+ * Move `mode` parameter in `readdir` method (second optional parameter)
+
 ## v1.12.0
 _2018-11-11_
 

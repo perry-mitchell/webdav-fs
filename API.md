@@ -1,6 +1,9 @@
 ## Functions
 
 <dl>
+<dt><a href="#createWebDAVfs">createWebDAVfs(webDAVEndpoint, [options])</a></dt>
+<dd><p>Create a new client adapter</p>
+</dd>
 <dt><a href="#createReadStream">createReadStream(filePath, [options])</a> ⇒ <code>Readable</code></dt>
 <dd><p>Create a read stream for a remote file</p>
 </dd>
@@ -10,7 +13,7 @@
 <dt><a href="#mkdir">mkdir(dirPath, callback)</a></dt>
 <dd><p>Create a remote directory</p>
 </dd>
-<dt><a href="#readdir">readdir(path, callback, [mode])</a></dt>
+<dt><a href="#readdir">readdir(path, [mode], callback)</a></dt>
 <dd><p>Read a directory synchronously.
 Maps -&gt; fs.readdir</p>
 </dd>
@@ -43,6 +46,10 @@ Maps -&gt; fs.readdir</p>
 <dt><a href="#CreateWriteStreamOptions">CreateWriteStreamOptions</a> : <code>Object</code></dt>
 <dd><p>Options for createWriteStream</p>
 </dd>
+<dt><a href="#ClientOptions">ClientOptions</a> : <code>Object</code></dt>
+<dd><p>Adapter options, which match to the underlying WebDAV-client API:
+ <a href="https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient">WebDAV-Client API</a></p>
+</dd>
 <dt><a href="#ReadDirMode">ReadDirMode</a> : <code>&#x27;node&#x27;</code> | <code>&#x27;stat&#x27;</code></dt>
 <dd><p>Readdir processing mode.
 When set to &#39;node&#39;, readdir will return an array of strings like Node&#39;s
@@ -51,6 +58,27 @@ objects.</p>
 </dd>
 </dl>
 
+<a name="createWebDAVfs"></a>
+
+## createWebDAVfs(webDAVEndpoint, [options])
+Create a new client adapter
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| webDAVEndpoint | <code>String</code> | The WebDAV server URL |
+| [options] | <code>Object</code> | Connection options for the client:  [WebDAV-Client API](https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient) |
+
+<a name="createWebDAVfs.setFetchMethod"></a>
+
+### createWebDAVfs.setFetchMethod()
+Set the fetch-style method to use for requests
+This overrides the built-in fetch function in `webdav-client`, which is
+`node-fetch`.
+
+**Kind**: static method of [<code>createWebDAVfs</code>](#createWebDAVfs)  
+**See**: https://github.com/perry-mitchell/webdav-client#overriding-the-built-in-fetch-function  
 <a name="createReadStream"></a>
 
 ## createReadStream(filePath, [options]) ⇒ <code>Readable</code>
@@ -91,7 +119,7 @@ Create a remote directory
 
 <a name="readdir"></a>
 
-## readdir(path, callback, [mode])
+## readdir(path, [mode], callback)
 Read a directory synchronously.
 Maps -> fs.readdir
 
@@ -101,8 +129,8 @@ Maps -> fs.readdir
 | Param | Type | Description |
 | --- | --- | --- |
 | path | <code>String</code> | The path to read at |
+| [mode] | <code>String</code> | The readdir processing mode (default 'node') |
 | callback | <code>function</code> | Callback: function(error, files) |
-| [mode] | [<code>ReadDirMode</code>](#ReadDirMode) | The readdir processing mode (default 'node') |
 
 <a name="readFile"></a>
 
@@ -209,6 +237,23 @@ Options for createWriteStream
 | Name | Type | Description |
 | --- | --- | --- |
 | [headers] | <code>Object</code> | Optionally override the headers |
+
+<a name="ClientOptions"></a>
+
+## ClientOptions : <code>Object</code>
+Adapter options, which match to the underlying WebDAV-client API:
+ [WebDAV-Client API](https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient)
+
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| [username] | <code>String</code> | The username to use for authentication |
+| [password] | <code>String</code> | The password to use for authentication |
+| [httpsAgent] | <code>https.Agent</code> | Override for the HTTPS agent |
+| [httpAgent] | <code>http.Agent</code> | Override for the HTTP agent |
+| [token] | <code>Object</code> | Optional token override for OAuth |
 
 <a name="ReadDirMode"></a>
 
