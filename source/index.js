@@ -128,11 +128,23 @@ function createWebDAVfs(webDAVEndpoint, options = {}) {
          * Maps -> fs.readdir
          * @see https://nodejs.org/api/fs.html#fs_fs_readdir_path_callback
          * @param {String} path The path to read at
+         * @param {String=} mode The readdir processing mode (default 'node')
          * @param {Function} callback Callback: function(error, files)
-         * @param {ReadDirMode=} mode The readdir processing mode (default 'node')
          */
-        readdir: function(dirPath, callback, mode) {
-            mode = mode || "node";
+        readdir: function(/* dirPath[, mode], callback */) {
+            var args = Array.prototype.slice.call(arguments),
+                argc = args.length;
+            if (argc <= 1) {
+                throw new Error("Invalid number of arguments");
+            }
+            var dirPath = args[0],
+                mode = (typeof args[1] === "string") ? args[1] : "node",
+                callback = function() {};
+            if (typeof args[1] === "function") {
+                callback = args[1];
+            } else if (argc >= 3 && typeof args[2] === "function") {
+                callback = args[2];
+            }
             client
                 .getDirectoryContents(dirPath)
                 .then(function(contents) {
