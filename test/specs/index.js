@@ -13,8 +13,10 @@ const copyDir = require("copy-dir").sync;
 function createWebDAVClient() {
     return createClient(
         "http://localhost:" + createServer.test.port + "/webdav/server",
-        createServer.test.username,
-        createServer.test.password
+        {
+            username: createServer.test.username,
+            password: createServer.test.password
+        }
     )
 }
 

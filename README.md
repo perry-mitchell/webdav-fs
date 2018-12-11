@@ -105,12 +105,12 @@ wfs.mkdir("/remote/dir", function(err) {
 });
 ```
 
-### readdir(path, callback[, mode])
+### readdir(path[, mode], callback)
 
 Read the contents of a remote directory:
 
 ```javascript
-wfs.readdir("/some/remote/path/", function(err, contents) {
+wfs.readdir("/some/remote/path/", "node", function(err, contents) {
     // callback is an array of filenames
 });
 ```

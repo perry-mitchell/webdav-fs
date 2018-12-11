@@ -1,8 +1,6 @@
-"use strict";
+const { createClient } = require("webdav");
 
-var TYPE_KEY = '@@fsType';
-
-var createWebDAVClient = require("webdav");
+const TYPE_KEY = '@@fsType';
 
 function __convertStat(data) {
     return {
@@ -44,11 +42,26 @@ function __executeCallbackAsync(callback, args) {
  * @property {Object=} headers - Optionally override the headers
  */
 
-function createWebDAVfs(webDAVEndpoint, username, password, agent) {
-    var client = createWebDAVClient(webDAVEndpoint, username, password, agent);
+/**
+ * Adapter options, which match to the underlying WebDAV-client API:
+ *  {@link https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient|WebDAV-Client API}
+ * @typedef {Object} ClientOptions
+ * @property {String=} username The username to use for authentication
+ * @property {String=} password The password to use for authentication
+ * @property {https.Agent=} httpsAgent Override for the HTTPS agent
+ * @property {http.Agent=} httpAgent Override for the HTTP agent
+ * @property {Object=} token Optional token override for OAuth
+ */
 
+/**
+ * Create a new client adapter
+ * @param {String} webDAVEndpoint The WebDAV server URL
+ * @param {Object=} options Connection options for the client:
+ *  {@link https://github.com/perry-mitchell/webdav-client/blob/master/API.md#module_WebDAV.createClient|WebDAV-Client API}
+ */
+function createWebDAVfs(webDAVEndpoint, options = {}) {
+    const client = createClient(webDAVEndpoint, options);
     return {
-
         // fs adapter type (for downstream integrations)
         [TYPE_KEY]: "webdav-fs",
 
@@ -58,7 +71,7 @@ function createWebDAVfs(webDAVEndpoint, username, password, agent) {
          * @param {CreateReadStreamOptions=} options Options for the stream
          * @returns {Readable} A readable stream
          */
-        createReadStream: function(filePath, options) {
+        createReadStream: (filePath, options) => {
             var clientOptions = {};
             if (options && options !== null) {
                 if (typeof options.headers === "object") {
@@ -115,11 +128,23 @@ function createWebDAVfs(webDAVEndpoint, username, password, agent) {
          * Maps -> fs.readdir
          * @see https://nodejs.org/api/fs.html#fs_fs_readdir_path_callback
          * @param {String} path The path to read at
+         * @param {String=} mode The readdir processing mode (default 'node')
          * @param {Function} callback Callback: function(error, files)
-         * @param {ReadDirMode=} mode The readdir processing mode (default 'node')
          */
-        readdir: function(dirPath, callback, mode) {
-            mode = mode || "node";
+        readdir: function(/* dirPath[, mode], callback */) {
+            var args = Array.prototype.slice.call(arguments),
+                argc = args.length;
+            if (argc <= 1) {
+                throw new Error("Invalid number of arguments");
+            }
+            var dirPath = args[0],
+                mode = (typeof args[1] === "string") ? args[1] : "node",
+                callback = function() {};
+            if (typeof args[1] === "function") {
+                callback = args[1];
+            } else if (argc >= 3 && typeof args[2] === "function") {
+                callback = args[2];
+            }
             client
                 .getDirectoryContents(dirPath)
                 .then(function(contents) {

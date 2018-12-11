@@ -16,9 +16,11 @@ describe("createClient", function() {
         const agent = new http.Agent({});
         const client = createClient(
             "http://localhost:" + createServer.test.port + "/webdav/server",
-            createServer.test.username,
-            createServer.test.password,
-            agent
+            {
+                username: createServer.test.username,
+                password: createServer.test.password,
+                httpAgent: agent
+            }
         );
         client.readdir("/", (err, contents) => {
             expect(err).to.be.null;
