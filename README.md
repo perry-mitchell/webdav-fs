@@ -131,6 +131,8 @@ wfs.readFile("/website/index.php", "utf8", function(err, data) {
 });
 ```
 
+`encoding` is optional and can be either `utf8` (default - returns a string) or `binary` (returns a `Buffer`).
+
 ### rename(currentPath, destinationPath, callback)
 
 Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
