@@ -212,3 +212,8 @@ createWebDAVfs.setFetchMethod(window.fetch);
 ```
 
 Refer to [`webdav-client`'s documentation](https://github.com/perry-mitchell/webdav-client#overriding-the-built-in-fetch-function) for more information.
+
+### Browser usage and CORS
+This library isn't exactly designed for use within the browser, although it might work if bundled using a tool like Webpack.
+
+When in the browser take care with policies such as CORS - If the server is not configured correctly WebDAV requests will fail. Make sure that you return the correct CORS headers. Issues surrounding CORS errors without any indication that an error lies in this library will be closed.
