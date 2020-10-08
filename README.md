@@ -1,4 +1,5 @@
-# webdav-fs
+# WebDAV-fs
+
 Node `fs` wrapper for WebDAV. Perform basic filesystem tasks in a similar manner to using async `fs` methods like `readdir` and `writeFile`. `webdav-fs` uses [`webdav-client`](https://github.com/perry-mitchell/webdav-client) under the hood.
 
 [![Build Status](https://travis-ci.org/perry-mitchell/webdav-fs.svg)](https://travis-ci.org/perry-mitchell/webdav-fs) [![npm version](https://badge.fury.io/js/webdav-fs.svg)](https://www.npmjs.com/package/webdav-fs) [![npm downloads](https://img.shields.io/npm/dm/webdav-fs.svg)](https://www.npmjs.com/package/webdav-fs)
@@ -10,6 +11,8 @@ Install webdav-fs using npm:
 ```
 npm install webdav-fs --save
 ```
+
+Supports NodeJS 10 and above. For Node 8 support, use v2.
 
 ## Examples
 
