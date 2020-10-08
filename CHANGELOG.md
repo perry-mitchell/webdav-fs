@@ -1,5 +1,12 @@
 # WebDAV-fs changelog
 
+## v3.0.0
+_2020-10-08_
+
+ * Upgrade WebDAV client to 3.4.0
+ * Deprecate Node 6 and 8 (min 10)
+ * Upgrade all dependencies
+
 ## v2.0.0
 _2018-12-11_
 
