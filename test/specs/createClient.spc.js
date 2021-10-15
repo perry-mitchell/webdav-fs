@@ -3,23 +3,23 @@ const createServer = require("webdav/test/server/index.js");
 
 const http = require("http");
 
-describe("createClient", function() {
-    beforeEach(function() {
+describe("createClient", function () {
+    beforeEach(function () {
         setup.call(this);
     });
 
-    afterEach(function() {
+    afterEach(function () {
         tearDown.call(this);
     });
 
-    it("accepts an agent instance", function(done) {
+    it("accepts an agent instance", function (done) {
         const agent = new http.Agent({});
         const client = createClient(
             "http://localhost:" + createServer.test.port + "/webdav/server",
             {
                 username: createServer.test.username,
                 password: createServer.test.password,
-                httpAgent: agent
+                httpAgent: agent,
             }
         );
         client.readdir("/", (err, contents) => {

@@ -1,6 +1,6 @@
 "use strict";
 
-const path = require("path");
+const path = require("path").posix;
 
 const createClient = require("../../source/index.js");
 const createServer = require("webdav/test/server/index.js");
@@ -11,13 +11,10 @@ const rimraf = require("rimraf").sync;
 const copyDir = require("copy-dir").sync;
 
 function createWebDAVClient() {
-    return createClient(
-        "http://localhost:" + createServer.test.port + "/webdav/server",
-        {
-            username: createServer.test.username,
-            password: createServer.test.password
-        }
-    )
+    return createClient("http://localhost:" + createServer.test.port + "/webdav/server", {
+        username: createServer.test.username,
+        password: createServer.test.password,
+    });
 }
 
 function createWebDAVServer() {
@@ -26,7 +23,10 @@ function createWebDAVServer() {
 
 function clean() {
     rimraf(path.resolve(__dirname, "../testContents"));
-    copyDir(path.resolve(__dirname, "../serverContents"), path.resolve(__dirname, "../testContents"));
+    copyDir(
+        path.resolve(__dirname, "../serverContents"),
+        path.resolve(__dirname, "../testContents")
+    );
 }
 
 function setup() {
@@ -45,5 +45,5 @@ Object.assign(global, {
     expect: expect,
     setup: setup,
     sinon: sinon,
-    tearDown: tearDown
+    tearDown: tearDown,
 });
