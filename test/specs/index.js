@@ -1,6 +1,6 @@
 "use strict";
 
-const path = require("path").posix;
+const path = require("path");
 
 const createClient = require("../../source/index.js");
 const createServer = require("webdav/test/server/index.js");
