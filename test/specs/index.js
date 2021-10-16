@@ -2,8 +2,9 @@
 
 const path = require("path");
 
-const createClient = require("../../source/index.js");
-const createServer = require("webdav/test/server/index.js");
+const createWebDAVfs = require("../../source/index.js");
+const { createWebDAVServer } = require("webdav/test/server/index.js");
+const { PASSWORD, PORT, USERNAME } = require("webdav/test/server/credentials.js");
 
 const expect = require("chai").expect;
 const sinon = require("sinon");
@@ -11,14 +12,10 @@ const rimraf = require("rimraf").sync;
 const copyDir = require("copy-dir").sync;
 
 function createWebDAVClient() {
-    return createClient("http://localhost:" + createServer.test.port + "/webdav/server", {
-        username: createServer.test.username,
-        password: createServer.test.password,
+    return createWebDAVfs("http://localhost:" + PORT + "/webdav/server", {
+        username: USERNAME,
+        password: PASSWORD,
     });
-}
-
-function createWebDAVServer() {
-    return createServer(path.resolve(__dirname, "../testContents"));
 }
 
 function clean() {
