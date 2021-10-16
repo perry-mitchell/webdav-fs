@@ -1,4 +1,4 @@
-const createClient = require("../../source/index.js");
+const createClient = require("../../dist/index.js");
 const { PASSWORD, PORT, USERNAME } = require("webdav/test/server/credentials.js");
 
 const http = require("http");
