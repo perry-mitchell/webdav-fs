@@ -12,7 +12,7 @@ const rimraf = require("rimraf").sync;
 const copyDir = require("copy-dir").sync;
 
 /**
- * This is copied from 
+ * This is copied from
  * https://github.com/perry-mitchell/webdav-client/blob/24e35322ad04a56abb8db54b1a06cb4a88120ef3/test/server/index.js
  * The original code "hardcodes" the server path which is unusable in require(),
  * thus we need to duplicate the source here.
@@ -50,8 +50,8 @@ function createServer(dir, authType) {
             "Access-Control-Allow-Methods":
                 "HEAD, GET, PUT, PROPFIND, DELETE, OPTIONS, MKCOL, MOVE, COPY",
             "Access-Control-Allow-Headers":
-                "Accept, Authorization, Content-Type, Content-Length, Depth",
-        },
+                "Accept, Authorization, Content-Type, Content-Length, Depth"
+        }
     });
     // console.log(`Created server on localhost with port: 9988, and authType: ${authType}`);
     return {
@@ -67,14 +67,14 @@ function createServer(dir, authType) {
             return new Promise(function (resolve) {
                 server.stop(resolve);
             });
-        },
+        }
     };
 }
 
 function createWebDAVClient() {
     return createWebDAVfs("http://localhost:" + PORT + "/webdav/server", {
         username: USERNAME,
-        password: PASSWORD,
+        password: PASSWORD
     });
 }
 
@@ -106,5 +106,5 @@ Object.assign(global, {
     expect: expect,
     setup: setup,
     sinon: sinon,
-    tearDown: tearDown,
+    tearDown: tearDown
 });

@@ -4,7 +4,7 @@ import type {
     CreateReadStreamOptions,
     CreateWriteStreamOptions,
     FileStat,
-    BufferLike,
+    BufferLike
 } from "webdav";
 
 const TYPE_KEY = "@@fsType";
@@ -26,7 +26,7 @@ function __convertStat(data: FileStat) {
         },
         mtime: new Date(data.lastmod).getTime(),
         name: data.basename,
-        size: data.size || 0,
+        size: data.size || 0
     };
 }
 
@@ -289,7 +289,7 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
                     __executeCallbackAsync(callbackReal, [null]);
                 })
                 .catch(callbackReal);
-        },
+        }
     };
 }
 

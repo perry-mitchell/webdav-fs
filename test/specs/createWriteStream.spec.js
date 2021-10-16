@@ -12,7 +12,7 @@ function waitOnFile(filename) {
                 resources: [filename],
                 interval: 50,
                 timeout: 500,
-                window: 0,
+                window: 0
             },
             function (err) {
                 if (err) {
