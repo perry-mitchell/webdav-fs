@@ -14,14 +14,11 @@ describe("createClient", function () {
 
     it("accepts an agent instance", function (done) {
         const agent = new http.Agent({});
-        const client = createClient(
-            "http://localhost:" + PORT + "/webdav/server",
-            {
-                username: USERNAME,
-                password: PASSWORD,
-                httpAgent: agent,
-            }
-        );
+        const client = createClient("http://localhost:" + PORT + "/webdav/server", {
+            username: USERNAME,
+            password: PASSWORD,
+            httpAgent: agent,
+        });
         client.readdir("/", (err, contents) => {
             expect(err).to.be.null;
             expect(contents).to.have.lengthOf(4);

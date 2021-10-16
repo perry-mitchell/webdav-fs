@@ -23,7 +23,7 @@ describe("mkdir", function () {
 
     it("throws if directory already exists", function (done) {
         this.client.mkdir("/sub folder", (err) => {
-            expect(err.message).to.match(/status code 405/i);
+            expect(err.status).to.equal(405);
             done();
         });
     });
