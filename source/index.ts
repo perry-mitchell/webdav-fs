@@ -293,4 +293,4 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
     };
 }
 
-export default createWebDAVfs;
+export = createWebDAVfs;
