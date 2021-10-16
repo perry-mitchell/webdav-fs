@@ -151,7 +151,6 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
             callback?: CallbackType
         ) {
             let mode = typeof modeOrCallback === "string" ? modeOrCallback : "node";
-
             let callbackReal: CallbackType = function () {};
             if (typeof modeOrCallback === "function") {
                 callbackReal = modeOrCallback;
@@ -189,7 +188,6 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
         ) {
             let encoding = typeof encodingOrCallback === "string" ? encodingOrCallback : "text";
             let callbackReal: CallbackType = function () {};
-
             if (typeof encodingOrCallback === "function") {
                 callbackReal = encodingOrCallback;
             } else if (callback !== undefined && typeof callback === "function") {
