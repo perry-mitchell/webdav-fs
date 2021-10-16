@@ -8,7 +8,7 @@
     "build:node": "tsc",
     "clean": "rimraf source/index.js source/index.d.ts",
     "docs": "jsdoc2md source/index.js > API.md",
-    "test": "npm build && nyc mocha -r test/specs/index.js test/specs/**/*.js",
+    "test": "npm run build && nyc mocha -r test/specs/index.js test/specs/**/*.js",
     "format": "prettier --write \"{source,test}/**/*.{js,ts}\""
   },
   "types": "source/index.d.ts",
