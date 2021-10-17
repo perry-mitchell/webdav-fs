@@ -1,7 +1,6 @@
 const path = require("path");
 
 describe("readdir", function() {
-
     beforeEach(function() {
         setup.call(this);
     });
@@ -37,7 +36,7 @@ describe("readdir", function() {
 
     it("throws an error if the directory doesn't exist", function(done) {
         this.client.readdir("/non-existent", (err, contents) => {
-            expect(err.message).to.match(/status code 404/i);
+            expect(err.status).to.equal(404);
             done();
         });
     });
@@ -51,12 +50,11 @@ describe("readdir", function() {
     });
 
     describe("using mode 'stat'", function() {
-
         it("reads the contents of a directory", function(done) {
             this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
-                const subfolder = contents.find(item => item.name === "sub folder");
-                const fractal = contents.find(item => item.name === "fractal.jpg");
+                const subfolder = contents.find((item) => item.name === "sub folder");
+                const fractal = contents.find((item) => item.name === "fractal.jpg");
                 expect(subfolder).to.be.an("object");
                 expect(fractal).to.be.an("object");
                 done();
@@ -66,7 +64,7 @@ describe("readdir", function() {
         it("provides isFile method", function(done) {
             this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
-                const fractal = contents.find(item => item.name === "fractal.jpg");
+                const fractal = contents.find((item) => item.name === "fractal.jpg");
                 expect(fractal).to.have.property("isFile").that.is.a("function");
                 expect(fractal.isFile()).to.be.true;
                 done();
@@ -76,13 +74,11 @@ describe("readdir", function() {
         it("provides isDirectory method", function(done) {
             this.client.readdir("/", "stat", (err, contents) => {
                 expect(err).to.be.null;
-                const subfolder = contents.find(item => item.name === "sub folder");
+                const subfolder = contents.find((item) => item.name === "sub folder");
                 expect(subfolder).to.have.property("isDirectory").that.is.a("function");
                 expect(subfolder.isDirectory()).to.be.true;
                 done();
             });
         });
-
     });
-
 });

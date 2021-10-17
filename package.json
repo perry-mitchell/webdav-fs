@@ -4,9 +4,15 @@
   "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
   "scripts": {
-    "docs": "jsdoc2md source/index.js > API.md",
-    "test": "nyc mocha -r test/specs/index.js test/specs/**/*.js"
+    "build": "npm run clean && npm run build:node",
+    "build:node": "npx tsc",
+    "clean": "npx rimraf dist",
+    "docs": "jsdoc2md dist/index.js > API.md",
+    "test": "npm run build && npx nyc mocha -r test/specs/index.js test/specs/**/*.js",
+    "format": "npx prettier --write \"{source,test}/**/*.{js,ts}\"",
+    "prepack": "npm run build"
   },
+  "types": "source/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/perry-mitchell/webdav-fs.git"
@@ -27,9 +33,10 @@
   },
   "homepage": "https://github.com/perry-mitchell/webdav-fs#readme",
   "dependencies": {
-    "webdav": "^3.4.0"
+    "webdav": "^4.7.0"
   },
   "devDependencies": {
+    "@types/node": "^16.10.9",
     "buffer-equals": "^2.0.0",
     "chai": "^4.2.0",
     "copy-dir": "^1.3.0",
@@ -38,8 +45,10 @@
     "jsdoc-to-markdown": "^6.0.1",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "sinon": "^9.2.0",
+    "typescript": "^4.4.4",
     "wait-on": "^5.2.0",
     "webdav-server": "^2.6.2"
   }

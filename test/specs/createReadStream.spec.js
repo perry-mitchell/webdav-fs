@@ -22,7 +22,7 @@ describe("createReadStream", function() {
     it("returns a read stream", function() {
         const stream = this.client.createReadStream("/fractal.jpg");
         expect(stream.readable).to.be.true;
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             // Let the stream breathe before finishing
             setTimeout(resolve, 150);
         });

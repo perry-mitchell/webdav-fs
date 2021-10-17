@@ -14,7 +14,7 @@ describe("mkdir", function() {
 
     it("creates a directory", function(done) {
         expect(directoryExists(targetDir)).to.be.false;
-        this.client.mkdir("/sub folder/new", err => {
+        this.client.mkdir("/sub folder/new", (err) => {
             expect(err).to.be.null;
             expect(directoryExists(targetDir)).to.be.true;
             done();
@@ -22,8 +22,8 @@ describe("mkdir", function() {
     });
 
     it("throws if directory already exists", function(done) {
-        this.client.mkdir("/sub folder", err => {
-            expect(err.message).to.match(/status code 405/i);
+        this.client.mkdir("/sub folder", (err) => {
+            expect(err.status).to.equal(405);
             done();
         });
     });

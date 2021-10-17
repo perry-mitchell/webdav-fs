@@ -1,8 +1,6 @@
 *.log
-.history
-.vscode
-.DS_Store
-.nyc_output
-source/test.js
-test/testContents
-node_modules
+.*
+test/testContents/
+node_modules/
+dist/
+source/*.js
