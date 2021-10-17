@@ -9,7 +9,8 @@
     "clean": "rimraf dist",
     "docs": "jsdoc2md dist/index.js > API.md",
     "test": "npm run build && nyc mocha -r test/specs/index.js test/specs/**/*.js",
-    "format": "prettier --write \"{source,test}/**/*.{js,ts}\""
+    "format": "prettier --write \"{source,test}/**/*.{js,ts}\"",
+    "prepack": "npm run build"
   },
   "types": "source/index.d.ts",
   "repository": {
