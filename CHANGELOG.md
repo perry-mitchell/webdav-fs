@@ -1,5 +1,12 @@
 # WebDAV-fs changelog
 
+## v4.0.0
+_2021-10-17_
+
+ * Upgrade WebDAV client to v4
+ * Typescript
+ * Deprecate Node < 14
+
 ## v3.0.0
 _2020-10-08_
 
