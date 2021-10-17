@@ -1,9 +1,9 @@
-const createClient = require("../../dist/index.js");
+const { createAdapter } = require("../../dist/index.js");
 const { PASSWORD, PORT, USERNAME } = require("webdav/test/server/credentials.js");
 
 const http = require("http");
 
-describe("createClient", function () {
+describe("createAdapter", function () {
     beforeEach(function () {
         setup.call(this);
     });
@@ -14,7 +14,7 @@ describe("createClient", function () {
 
     it("accepts an agent instance", function (done) {
         const agent = new http.Agent({});
-        const client = createClient("http://localhost:" + PORT + "/webdav/server", {
+        const client = createAdapter("http://localhost:" + PORT + "/webdav/server", {
             username: USERNAME,
             password: PASSWORD,
             httpAgent: agent

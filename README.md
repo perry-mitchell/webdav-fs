@@ -1,4 +1,5 @@
-# WebDAV-fs
+# WebDAV-FS
+> Node FS wrapper for WebDAV services
 
 Node `fs` wrapper for WebDAV. Perform basic filesystem tasks in a similar manner to using async `fs` methods like `readdir` and `writeFile`. `webdav-fs` uses [`webdav-client`](https://github.com/perry-mitchell/webdav-client) under the hood.
 
@@ -12,20 +13,22 @@ Install webdav-fs using npm:
 npm install webdav-fs --save
 ```
 
-Supports NodeJS 10 and above. For Node 8 support, use v2.
+Supports NodeJS 14 and above. For Node 10, use v3, for Node 8, use v2.
 
 ## Examples
 
 You can use webdav-fs in authenticated or non-authenticated mode:
 
-```javascript
+```typescript
 // Using authentication:
-var wfs = require("webdav-fs")("http://example.com/webdav/", {
+import { createAdapter } from "webdav-fs";
+
+const wfs = createAdapter("http://example.com/webdav/", {
     username: "username",
     password: "password"
 });
 
-wfs.readdir("/Work", function(err, contents) {
+wfs.readdir("/Work", (err, contents) => {
     if (!err) {
         console.log("Dir contents:", contents);
     } else {
@@ -34,11 +37,13 @@ wfs.readdir("/Work", function(err, contents) {
 });
 ```
 
-```javascript
+```typescript
 // Without using authentication:
-var wfs = require("webdav-fs")("http://example.com/webdav/");
+import { createAdapter } from "webdav-fs";
 
-wfs.stat("/report.docx", function(err, data) {
+const wfs = createAdapter("http://example.com/webdav/");
+
+wfs.stat("/report.docx", (err, data) => {
     console.log("Is file:", data.isFile());
 });
 ```
@@ -46,23 +51,23 @@ wfs.stat("/report.docx", function(err, data) {
 For more control over the HTTP/TLS connection options, you can pass an instance of [`http.Agent`](https://nodejs.org/api/http.html#http_class_http_agent)
  or [`https.Agent`](https://nodejs.org/api/https.html#https_class_https_agent):
 
-```javascript
-var agent = require("https").Agent({
+```typescript
+import { Agent } from "https";
+import { createAdapter } from "webdav-fs";
+
+const agent = new Agent({
     keepAlive: true
     // we can also control certificate verification behaviour here
 });
 
-var wfs = require("webdav-fs")("https://example.com/webdav/", {
+const wfs = createAdapter("https://example.com/webdav/", {
     username: "username",
     password: "password",
     httpsAgent: agent
 });
 ```
 
-
 ## API
-
-You can read the [API documentation here](https://github.com/perry-mitchell/webdav-fs/blob/master/API.md), or check out the examples below.
 
 The following methods are available on the `webdav-fs` module:
 
@@ -70,7 +75,7 @@ The following methods are available on the `webdav-fs` module:
 
 Create a read stream on a remote file:
 
-```javascript
+```typescript
 wfs
     .createReadStream("/dir/somefile.dat")
     .pipe(fs.createWriteStream("./somefile.dat"));
@@ -80,15 +85,15 @@ The `options` object supports overriding remote `headers` as well as a range (`s
 
 The following requests the first 300 bytes of a file:
 
-```javascript
-var myPartialStream = wfs.createReadStream("/dir/somefile.dat", { start: 0, end: 299 });
+```typescript
+const myPartialStream = wfs.createReadStream("/dir/somefile.dat", { start: 0, end: 299 });
 ```
 
 ### createWriteStream(path[, options])
 
 Create a write stream for a remote file:
 
-```javascript
+```typescript
 fs
     .createReadStream("./myFile.dat")
     .pipe(wfs.createWriteStream("/data/myFile.dat"));
@@ -100,8 +105,8 @@ The `options` object supports overriding remote `headers`.
 
 Create a remote directory:
 
-```javascript
-wfs.mkdir("/remote/dir", function(err) {
+```typescript
+wfs.mkdir("/remote/dir", err => {
     // handle error if truthy
 });
 ```
@@ -110,8 +115,8 @@ wfs.mkdir("/remote/dir", function(err) {
 
 Read the contents of a remote directory:
 
-```javascript
-wfs.readdir("/some/remote/path/", "node", function(err, contents) {
+```typescript
+wfs.readdir("/some/remote/path/", "node", (err, contents) => {
     // callback is an array of filenames
 });
 ```
@@ -125,8 +130,8 @@ wfs.readdir("/some/remote/path/", "node", function(err, contents) {
 
 Read the contents of a remote file:
 
-```javascript
-wfs.readFile("/website/index.php", "utf8", function(err, data) {
+```typescript
+wfs.readFile("/website/index.php", "utf8", (err, data) => {
     // data is the contents of the file
     // encoding is optional
 });
@@ -138,8 +143,8 @@ wfs.readFile("/website/index.php", "utf8", function(err, data) {
 
 Move/rename a file to another location/name. This does not create new directories for nested files (moving a file into a new directory will not work).
 
-```javascript
-wfs.rename("/my-document.docx", "/Documents/personal.docx", function (err) {
+```typescript
+wfs.rename("/my-document.docx", "/Documents/personal.docx", err => {
     // handle error
 });
 ```
@@ -148,8 +153,8 @@ wfs.rename("/my-document.docx", "/Documents/personal.docx", function (err) {
 
 Stat a remote file:
 
-```javascript
-wfs.stat("/the-internet.dat", function(err, fileStat) {
+```typescript
+wfs.stat("/the-internet.dat", (err, fileStat) => {
     console.log(fileStat);
 });
 ```
@@ -167,8 +172,8 @@ A stat has the following properties:
 
 Delete a remote file or directory:
 
-```javascript
-wfs.unlink("/remote/path", function(err) {
+```typescript
+wfs.unlink("/remote/path", (err) => {
     // handle error if truthy
 });
 ```
@@ -177,8 +182,8 @@ wfs.unlink("/remote/path", function(err) {
 
 Write data to a remote file:
 
-```javascript
-wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(err) {
+```typescript
+wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", err => {
     if (err) {
         console.error(err.message);
     }
@@ -187,8 +192,8 @@ wfs.writeFile("/Temp/im-here.txt", "This is a saved file! REALLY!!", function(er
 
 `writeFile` supports writing binary files as well:
 
-```javascript
-fs.readFile(sourceFile, "binary", function(err, data) {
+```typescript
+fs.readFile(sourceFile, "binary", (err, data) => {
     wfs.writeFile(destFile, data, "binary", function(err) {
         // handle error
     });

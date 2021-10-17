@@ -3,7 +3,7 @@
 const path = require("path");
 const ws = require("webdav-server").v2;
 
-const createWebDAVfs = require("../../dist/index.js");
+const { createAdapter } = require("../../dist/index.js");
 const { PASSWORD, PORT, USERNAME } = require("webdav/test/server/credentials.js");
 
 const expect = require("chai").expect;
@@ -72,7 +72,7 @@ function createServer(dir, authType) {
 }
 
 function createWebDAVClient() {
-    return createWebDAVfs("http://localhost:" + PORT + "/webdav/server", {
+    return createAdapter("http://localhost:" + PORT + "/webdav/server", {
         username: USERNAME,
         password: PASSWORD
     });

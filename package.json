@@ -14,9 +14,15 @@
     "test:format": "prettier --check \"{source,test}/**/*.{js,ts}\"",
     "test:specs": "npm run build && nyc mocha -r test/specs/index.js test/specs/**/*.js"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/perry-mitchell/webdav-fs.git"
+  },
+  "engines": {
+    "node": ">=14"
   },
   "keywords": [
     "webdav",
