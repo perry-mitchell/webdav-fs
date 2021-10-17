@@ -18,10 +18,10 @@ interface ExtCreateReadStreamOptions extends CreateReadStreamOptions {
 
 function __convertStat(data: FileStat) {
     return {
-        isDirectory: function() {
+        isDirectory: function () {
             return data.type === "directory";
         },
-        isFile: function() {
+        isFile: function () {
             return data.type === "file";
         },
         mtime: new Date(data.lastmod).getTime(),
@@ -32,11 +32,11 @@ function __convertStat(data: FileStat) {
 
 function __executeCallbackAsync(callback: Function, ...args: any[]) {
     if (typeof setImmediate !== "undefined") {
-        setImmediate(function() {
+        setImmediate(function () {
             callback.apply(null, ...args);
         });
     } else {
-        setTimeout(function() {
+        setTimeout(function () {
             callback.apply(null, ...args);
         }, 0);
     }
@@ -104,7 +104,7 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {CreateWriteStreamOptions=} options Options for the stream
          * @returns {Writeable} A writeable stream
          */
-        createWriteStream: function(filePath: PathLike, options: CreateWriteStreamOptions) {
+        createWriteStream: function (filePath: PathLike, options: CreateWriteStreamOptions) {
             var clientOptions: CreateWriteStreamOptions = {};
             if (options && options !== null) {
                 if (typeof options.headers === "object") {
@@ -119,10 +119,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String} dirPath The remote path to create
          * @param {Function} callback Callback: function(error)
          */
-        mkdir: function(dirPath: PathLike, callback: CallbackType) {
+        mkdir: function (dirPath: PathLike, callback: CallbackType) {
             client
                 .createDirectory(dirPath)
-                .then(function() {
+                .then(function () {
                     __executeCallbackAsync(callback, [null]);
                 })
                 .catch(callback);
@@ -145,13 +145,13 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String=} mode The readdir processing mode (default 'node')
          * @param {Function} callback Callback: function(error, files)
          */
-        readdir: function(
+        readdir: function (
             dirPath: PathLike,
             modeOrCallback: "node" | "stat" | CallbackType,
             callback?: CallbackType
         ) {
             let mode = typeof modeOrCallback === "string" ? modeOrCallback : "node";
-            let callbackReal: CallbackType = function() {};
+            let callbackReal: CallbackType = function () {};
             if (typeof modeOrCallback === "function") {
                 callbackReal = modeOrCallback;
             } else if (callback !== undefined && typeof callback == "function") {
@@ -159,10 +159,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
             }
             client
                 .getDirectoryContents(dirPath)
-                .then(function(contents: Array<FileStat>) {
+                .then(function (contents: Array<FileStat>) {
                     var results;
                     if (mode === "node") {
-                        results = contents.map(function(statItem) {
+                        results = contents.map(function (statItem) {
                             return statItem.basename;
                         });
                     } else if (mode === "stat") {
@@ -181,13 +181,13 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String=} encoding Optional file encoding to read (utf8/binary) (default: utf8)
          * @param {Function} callback Callback: function(error, contents)
          */
-        readFile: function(
+        readFile: function (
             filename: PathLike,
             encodingOrCallback: "utf8" | "text" | "binary" | CallbackType,
             callback?: CallbackType
         ) {
             let encoding = typeof encodingOrCallback === "string" ? encodingOrCallback : "text";
-            let callbackReal: CallbackType = function() {};
+            let callbackReal: CallbackType = function () {};
             if (typeof encodingOrCallback === "function") {
                 callbackReal = encodingOrCallback;
             } else if (callback !== undefined && typeof callback === "function") {
@@ -196,7 +196,7 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
             encoding = encoding === "utf8" ? "text" : encoding;
             client
                 .getFileContents(filename, { format: encoding })
-                .then(function(data) {
+                .then(function (data) {
                     __executeCallbackAsync(callbackReal, [null, data]);
                 })
                 .catch(callbackReal);
@@ -208,10 +208,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String} targetPath The new path name of the item
          * @param {Function} callback Callback: function(error)
          */
-        rename: function(filePath: PathLike, targetPath: PathLike, callback: CallbackType) {
+        rename: function (filePath: PathLike, targetPath: PathLike, callback: CallbackType) {
             client
                 .moveFile(filePath, targetPath)
-                .then(function() {
+                .then(function () {
                     __executeCallbackAsync(callback, [null]);
                 })
                 .catch(callback);
@@ -223,10 +223,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String} targetPath Directory to remove
          * @param {Function} callback Callback: function(error)
          */
-        rmdir: function(targetPath: PathLike, callback: CallbackType) {
+        rmdir: function (targetPath: PathLike, callback: CallbackType) {
             client
                 .deleteFile(targetPath)
-                .then(function() {
+                .then(function () {
                     __executeCallbackAsync(callback, [null]);
                 })
                 .catch(callback);
@@ -237,10 +237,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String} remotePath The remote item to stat
          * @param {Function} callback Callback: function(error, stat)
          */
-        stat: function(remotePath: PathLike, callback: CallbackType) {
+        stat: function (remotePath: PathLike, callback: CallbackType) {
             client
                 .stat(remotePath)
-                .then(function(stat) {
+                .then(function (stat) {
                     __executeCallbackAsync(callback, [null, __convertStat(stat as FileStat)]);
                 })
                 .catch(callback);
@@ -251,10 +251,10 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String} targetPath The remote file path to delete
          * @param {Function} callback Callback: function(error)
          */
-        unlink: function(targetPath: PathLike, callback: CallbackType) {
+        unlink: function (targetPath: PathLike, callback: CallbackType) {
             client
                 .deleteFile(targetPath)
-                .then(function() {
+                .then(function () {
                     __executeCallbackAsync(callback, [null]);
                 })
                 .catch(callback);
@@ -267,14 +267,14 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
          * @param {String=} encoding Optional encoding to write as (utf8/binary) (default: utf8)
          * @param {Function} callback Callback: function(error)
          */
-        writeFile: function(
+        writeFile: function (
             filename: PathLike,
             data: BufferLike | string,
             encodingOrCallback?: "utf8" | "text" | "binary" | CallbackType,
             callback?: CallbackType
         ) {
             let encoding = typeof encodingOrCallback === "string" ? encodingOrCallback : "text";
-            let callbackReal: CallbackType = function() {};
+            let callbackReal: CallbackType = function () {};
             if (typeof encodingOrCallback === "function") {
                 callbackReal = encodingOrCallback;
             } else if (callback !== undefined && typeof callback === "function") {
@@ -283,7 +283,7 @@ function createWebDAVfs(webDAVEndpoint: string, options: WebDAVClientOptions = {
             encoding = encoding === "utf8" ? "text" : encoding;
             client
                 .putFileContents(filename, data /*{ format: encoding }*/)
-                .then(function() {
+                .then(function () {
                     __executeCallbackAsync(callbackReal, [null]);
                 })
                 .catch(callbackReal);

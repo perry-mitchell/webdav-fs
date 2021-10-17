@@ -1,6 +1,5 @@
 *.log
-.*
+.nyc_output
 test/testContents/
-node_modules/
+node_modules
 dist/
-source/*.js

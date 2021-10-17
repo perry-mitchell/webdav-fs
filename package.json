@@ -3,16 +3,17 @@
   "version": "3.0.0",
   "description": "WebDAV wrapper for Node's fs",
   "main": "source/index.js",
+  "types": "source/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run build:node",
-    "build:node": "npx tsc",
-    "clean": "npx rimraf dist",
-    "docs": "jsdoc2md dist/index.js > API.md",
-    "test": "npm run build && npx nyc mocha -r test/specs/index.js test/specs/**/*.js",
-    "format": "npx prettier --write \"{source,test}/**/*.{js,ts}\"",
-    "prepack": "npm run build"
+    "build:node": "tsc",
+    "clean": "rimraf dist",
+    "format": "prettier --write \"{source,test}/**/*.{js,ts}\"",
+    "prepack": "npm run build",
+    "test": "npm run test:specs && npm run test:format",
+    "test:format": "prettier --check \"{source,test}/**/*.{js,ts}\"",
+    "test:specs": "npm run build && nyc mocha -r test/specs/index.js test/specs/**/*.js"
   },
-  "types": "source/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/perry-mitchell/webdav-fs.git"
@@ -42,7 +43,6 @@
     "copy-dir": "^1.3.0",
     "directory-exists": "^2.0.1",
     "exists-file": "^3.0.2",
-    "jsdoc-to-markdown": "^6.0.1",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",
