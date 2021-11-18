@@ -2,8 +2,8 @@
   "name": "webdav-fs",
   "version": "4.0.0",
   "description": "WebDAV wrapper for Node's fs",
-  "main": "source/index.js",
-  "types": "source/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run build:node",
     "build:node": "tsc",
