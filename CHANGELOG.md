@@ -1,5 +1,11 @@
 # WebDAV-fs changelog
 
+## v4.0.1
+_2021-11-18_
+
+ * **Bugfix**:
+   * Package.json script entry incorrect
+
 ## v4.0.0
 _2021-10-17_
 
