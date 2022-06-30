@@ -145,6 +145,19 @@ export function createAdapter(webDAVEndpoint: string, options: WebDAVClientOptio
                 .catch(callback);
         },
 
+        copy: function (
+            filePath: PathLike,
+            targetPath: PathLike,
+            callback: CallbackType<void>
+        ): void {
+            client
+                .copyFile(filePath, targetPath)
+                .then(function () {
+                    __executeCallbackAsync(callback, [null]);
+                })
+                .catch(callback);
+        },
+
         rmdir: function (targetPath: PathLike, callback: CallbackType<void>): void {
             client
                 .deleteFile(targetPath)
