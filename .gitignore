@@ -3,3 +3,4 @@
 test/testContents/
 node_modules
 dist/
+.idea/
